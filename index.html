@@ -1,5 +1,17 @@
-<html>
-<body>
-<h1>it works!</h1>
-</body>
-</html>
+---
+layout: default
+title: Blog
+---
+{% for post in site.posts %}
+<div class="blog_post">
+	<a href="{{ post.url }}">
+		<h1>{{post.title}}</h1>
+	</a>
+	<div class="blog_post_body">
+		{{ post.content }}
+	</div>
+	<div class="blog_postedby">Posted by: {{post.author}}</div>
+	<div class="blog_timestamp">{{post.date}}</div>
+</div>
+{% endfor %}
+
