@@ -69,6 +69,12 @@ body {
 			}
 			.blog_postedby { float:left; clear:both; }
 			.blog_timestamp { float:right }
+			
+			.games_group {float: left}
+                .game { background: url(../images/crosshatch.gif);  width: 235px; line-height:18px; float: left; margin: 10px 5px} 
+				.game h1 { background:url(../images/title_3.gif) repeat-x; padding:2px 10px; margin:0; font-size:15px; color:black;} 
+				.game_body { padding:5px }
+					.game_body image { text-align: center; }
 		
 			
 	#footer {
