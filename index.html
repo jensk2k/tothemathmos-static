@@ -4,14 +4,18 @@ title: Blog
 ---
 {% for post in site.posts %}
 <div class="blog_post">
-	<a href="{{ post.url }}">
-		<h1>{{post.title}}</h1>
-	</a>
+	<h1>{{post.title}}</h1>
 	<div class="blog_post_body">
+		{% assign psize = (post.content | split: '<!-- more -->' | size) %}
+		{% if psize > 1 %}
+		{{ post.content | split: '<!-- more -->' | first }}
+		<p><a href="{{ post.url }}">Read more</a></p>
+		{% else %}
 		{{ post.content }}
+		{% endif %}
 	</div>
-	<div class="blog_postedby">Posted by: {{post.author}}</div>
-	<div class="blog_timestamp">{{post.date}}</div>
+	<!--<div class="blog_postedby">Posted by: {{post.author}}</div>-->
+	<div class="blog_timestamp">{{post.date | date: "%Y-%m-%d"}}</div>
 </div>
 {% endfor %}
 
