@@ -3,25 +3,6 @@ layout: blog_post
 title: Advanced Triangulation in Unity
 author: mathmos_
 ---
-
-{% highlight C# linenos %}
-using UnityEngine;
-using System.Collections;
-
-public class Polygon2D {
-
-    public int[] triangles;
-    public Vector2[] vertices;
-
-    public Polygon2D(int[] triangle, Vector2[] vertices)
-    {
-        this.triangles = triangle;
-        this.vertices = vertices;
-    }
-}
-
-{% endhighlight %}
-
 <p>The purpose of these script are for generating triangles for advanced 2D polygons. If you are just attempting to triangulating individual concave or convex polygons I recommend using this instead <a href="http://wiki.unity3d.com/index.php?title=Triangulator">Triangulator</a>, but if you need to triangulate something more advanced like polygons with holes or multiple polygons at once you probably need to use the following. </p>
 <div class="imagebox">
 	<img src="/images/blog/Polygon1.png" width="350px"/>
