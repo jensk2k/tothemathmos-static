@@ -15,7 +15,7 @@ author: mathmos_
 	<div class="caption">
 	The triangulated result.
 	</div>
-</div>
+</div> 
 <!--<div style="clear:both"></div>-->
 <!-- more -->
 
