@@ -5,16 +5,16 @@ author: mathmos_
 ---
 <p>The purpose of these script are for generating triangles for advanced 2D polygons. If you are just attempting to triangulating individual concave or convex polygons I recommend using this instead <a href="http://wiki.unity3d.com/index.php?title=Triangulator">Triangulator</a>, but if you need to triangulate something more advanced like polygons with holes or multiple polygons at once you probably need to use the following. </p>
 <div class="imagebox">
-	<img src="/images/blog/Polygon1.png" width="350px"/>
-	<div class="caption">
-	A PSLG containing multiple polygons and a hole.
-	</div>
+    <img src="/images/blog/Polygon1.png" width="350px"/>
+    <div class="caption">
+    A PSLG containing multiple polygons and a hole.
+    </div>
 </div>
 <div class="imagebox">
-	<img src="/images/blog/Polygon3.png" width="350px"/>
-	<div class="caption">
-	The triangulated result.
-	</div>
+    <img src="/images/blog/Polygon3.png" width="350px"/>
+    <div class="caption">
+    The triangulated result.
+    </div>
 </div> 
 <!--<div style="clear:both"></div>-->
 <!-- more -->
@@ -22,604 +22,599 @@ author: mathmos_
 <p>The way works is that you produce the polygon outline in the form of a planar straight line graph (a PSLG) using the PSLG class. This is passed to a program called <a href="http://www.cs.cmu.edu/~quake/triangle.html">Triangle</a>, which performs the actual triangulation. Download a compiled version for Windows <a href="/files/triangle.exe">here</a> and place it in the directory C:\Triangle\ .</p>
 
 <h2>Usage</h2>
-<!-- code formatted by http://manoli.net/csharpformat/ -->
-<div class="csharpcode">
-<pre><span class="lnum">   1:  </span><span class="kwrd">using</span> UnityEngine;</pre>
-<pre><span class="lnum">   2:  </span><span class="kwrd">using</span> System.Collections;</pre>
-<pre><span class="lnum">   3:  </span><span class="kwrd">using</span> System.Collections.Generic;</pre>
-<pre><span class="lnum">   4:  </span>&nbsp;</pre>
-<pre><span class="lnum">   5:  </span><span class="kwrd">public</span> <span class="kwrd">class</span> TestTriangleAPI : MonoBehaviour {</pre>
-<pre><span class="lnum">   6:  </span>&nbsp;</pre>
-<pre><span class="lnum">   7:  </span>    <span class="rem">// Use this for initialization</span></pre>
-<pre><span class="lnum">   8:  </span>    <span class="kwrd">void</span> Start () {</pre>
-<pre><span class="lnum">   9:  </span>        <span class="kwrd">if</span> (gameObject.activeSelf)</pre>
-<pre><span class="lnum">  10:  </span>        {</pre>
-<pre><span class="lnum">  11:  </span>            List&lt;Vector2&gt; testVertices1 = <span class="kwrd">new</span> List&lt;Vector2&gt;(6);</pre>
-<pre><span class="lnum">  12:  </span>            testVertices1.Add(<span class="kwrd">new</span> Vector2(1f, 0f));</pre>
-<pre><span class="lnum">  13:  </span>            testVertices1.Add(<span class="kwrd">new</span> Vector2(0f, 6f));</pre>
-<pre><span class="lnum">  14:  </span>            testVertices1.Add(<span class="kwrd">new</span> Vector2(3f, 5f));</pre>
-<pre><span class="lnum">  15:  </span>            testVertices1.Add(<span class="kwrd">new</span> Vector2(4f, 7f));</pre>
-<pre><span class="lnum">  16:  </span>            testVertices1.Add(<span class="kwrd">new</span> Vector2(6f, 6f));</pre>
-<pre><span class="lnum">  17:  </span>            testVertices1.Add(<span class="kwrd">new</span> Vector2(6.5f, 2f));</pre>
-<pre><span class="lnum">  18:  </span>&nbsp;</pre>
-<pre><span class="lnum">  19:  </span>            List&lt;Vector2&gt; testVertices2 = <span class="kwrd">new</span> List&lt;Vector2&gt;(3);</pre>
-<pre><span class="lnum">  20:  </span>            testVertices2.Add(<span class="kwrd">new</span> Vector2(1.5f, 6.5f));</pre>
-<pre><span class="lnum">  21:  </span>            testVertices2.Add(<span class="kwrd">new</span> Vector2(2.25f, 8f));</pre>
-<pre><span class="lnum">  22:  </span>            testVertices2.Add(<span class="kwrd">new</span> Vector2(3.25f, 6.25f));</pre>
-<pre><span class="lnum">  23:  </span>&nbsp;</pre>
-<pre><span class="lnum">  24:  </span>            List&lt;Vector2&gt; hole1 = <span class="kwrd">new</span> List&lt;Vector2&gt;(5);</pre>
-<pre><span class="lnum">  25:  </span>            hole1.Add(<span class="kwrd">new</span> Vector2(3.5f, 3));</pre>
-<pre><span class="lnum">  26:  </span>            hole1.Add(<span class="kwrd">new</span> Vector2(4.5f, 2.5f));</pre>
-<pre><span class="lnum">  27:  </span>            hole1.Add(<span class="kwrd">new</span> Vector2(5.5f, 3.5f));</pre>
-<pre><span class="lnum">  28:  </span>            hole1.Add(<span class="kwrd">new</span> Vector2(5f, 4f));</pre>
-<pre><span class="lnum">  29:  </span>            hole1.Add(<span class="kwrd">new</span> Vector2(4f, 4f));</pre>
-<pre><span class="lnum">  30:  </span>&nbsp;</pre>
-<pre><span class="lnum">  31:  </span>            PSLG testPSLG = <span class="kwrd">new</span> PSLG();</pre>
-<pre><span class="lnum">  32:  </span>            testPSLG.AddVertexLoop(testVertices1);</pre>
-<pre><span class="lnum">  33:  </span>            testPSLG.AddVertexLoop(testVertices2);</pre>
-<pre><span class="lnum">  34:  </span>            testPSLG.AddHole(hole1);</pre>
-<pre><span class="lnum">  35:  </span>&nbsp;</pre>
-<pre><span class="lnum">  36:  </span>            TriangleAPI triangle = <span class="kwrd">new</span> TriangleAPI();</pre>
-<pre><span class="lnum">  37:  </span>            Polygon2D polygon = triangle.Triangulate(testPSLG);</pre>
-<pre><span class="lnum">  38:  </span>            <span class="kwrd">string</span> tris = polygon.triangles.Length / 3 + <span class="str">": "</span>;</pre>
-<pre><span class="lnum">  39:  </span>            <span class="kwrd">foreach</span> (<span class="kwrd">int</span> i <span class="kwrd">in</span> polygon.triangles)</pre>
-<pre><span class="lnum">  40:  </span>            {</pre>
-<pre><span class="lnum">  41:  </span>                tris += i + <span class="str">", "</span>;</pre>
-<pre><span class="lnum">  42:  </span>            }</pre>
-<pre><span class="lnum">  43:  </span>            </pre>
-<pre><span class="lnum">  44:  </span>            <span class="kwrd">string</span> verts = polygon.vertices.Length + <span class="str">": "</span>;</pre>
-<pre><span class="lnum">  45:  </span>            <span class="kwrd">foreach</span> (Vector2 i <span class="kwrd">in</span> polygon.vertices)</pre>
-<pre><span class="lnum">  46:  </span>            {</pre>
-<pre><span class="lnum">  47:  </span>                verts += i + <span class="str">", "</span>;</pre>
-<pre><span class="lnum">  48:  </span>            }</pre>
-<pre><span class="lnum">  49:  </span>&nbsp;</pre>
-<pre><span class="lnum">  50:  </span>            MeshBuilder builder = <span class="kwrd">new</span> MeshBuilder();</pre>
-<pre><span class="lnum">  51:  </span>&nbsp;</pre>
-<pre><span class="lnum">  52:  </span>            <span class="kwrd">for</span> (<span class="kwrd">int</span> i = 0; i &lt; polygon.triangles.Length; i += 3)</pre>
-<pre><span class="lnum">  53:  </span>            {</pre>
-<pre><span class="lnum">  54:  </span>                <span class="kwrd">int</span>[] indices = <span class="kwrd">new</span> <span class="kwrd">int</span>[] { polygon.triangles[i], polygon.triangles[i + 1], polygon.triangles[i + 2] };</pre>
-<pre><span class="lnum">  55:  </span>                Vector3[] tri = <span class="kwrd">new</span> Vector3[] { polygon.vertices[indices[0]], polygon.vertices[indices[1]], polygon.vertices[indices[2]] };</pre>
-<pre><span class="lnum">  56:  </span>                Vector3 normal = <span class="kwrd">new</span> Plane(tri[0], tri[1], tri[2]).normal;</pre>
-<pre><span class="lnum">  57:  </span>                Vector3[] normals = <span class="kwrd">new</span> Vector3[] { normal, normal, normal };</pre>
-<pre><span class="lnum">  58:  </span>                Vector2[] uvs = <span class="kwrd">new</span> Vector2[] { tri[0], tri[1], tri[2] };</pre>
-<pre><span class="lnum">  59:  </span>                builder.AddTriangleToMesh(tri, normals, uvs);</pre>
-<pre><span class="lnum">  60:  </span>            }</pre>
-<pre><span class="lnum">  61:  </span>&nbsp;</pre>
-<pre><span class="lnum">  62:  </span>            Mesh mesh = builder.Build();</pre>
-<pre><span class="lnum">  63:  </span>&nbsp;</pre>
-<pre><span class="lnum">  64:  </span>            gameObject.AddComponent&lt;MeshFilter&gt;().mesh = mesh;</pre>
-<pre><span class="lnum">  65:  </span>            gameObject.AddComponent&lt;MeshRenderer&gt;().material = <span class="kwrd">new</span> Material(Shader.Find(<span class="str">"Diffuse"</span>));</pre>
-<pre><span class="lnum">  66:  </span>        }</pre>
-<pre><span class="lnum">  67:  </span>    }</pre>
-<pre><span class="lnum">  68:  </span>}</pre>
-</div>
+{% highlight c# %}
+using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+
+public class TestTriangleAPI : MonoBehaviour {
+
+    // Use this for initialization
+    void Start () {
+        if (gameObject.activeSelf)
+        {
+            List<Vector2> testVertices1 = new List<Vector2>(6);
+            testVertices1.Add(new Vector2(1f, 0f));
+            testVertices1.Add(new Vector2(0f, 6f));
+            testVertices1.Add(new Vector2(3f, 5f));
+            testVertices1.Add(new Vector2(4f, 7f));
+            testVertices1.Add(new Vector2(6f, 6f));
+            testVertices1.Add(new Vector2(6.5f, 2f));
+
+            List<Vector2> testVertices2 = new List<Vector2>(3);
+            testVertices2.Add(new Vector2(1.5f, 6.5f));
+            testVertices2.Add(new Vector2(2.25f, 8f));
+            testVertices2.Add(new Vector2(3.25f, 6.25f));
+
+            List<Vector2> hole1 = new List<Vector2>(5);
+            hole1.Add(new Vector2(3.5f, 3));
+            hole1.Add(new Vector2(4.5f, 2.5f));
+            hole1.Add(new Vector2(5.5f, 3.5f));
+            hole1.Add(new Vector2(5f, 4f));
+            hole1.Add(new Vector2(4f, 4f));
+
+            PSLG testPSLG = new PSLG();
+            testPSLG.AddVertexLoop(testVertices1);
+            testPSLG.AddVertexLoop(testVertices2);
+            testPSLG.AddHole(hole1);
+
+            TriangleAPI triangle = new TriangleAPI();
+            Polygon2D polygon = triangle.Triangulate(testPSLG);
+            string tris = polygon.triangles.Length / 3 + ": ";
+            foreach (int i in polygon.triangles)
+            {
+                tris += i + ", ";
+            }
+            
+            string verts = polygon.vertices.Length + ": ";
+            foreach (Vector2 i in polygon.vertices)
+            {
+                verts += i + ", ";
+            }
+
+            MeshBuilder builder = new MeshBuilder();
+
+            for (int i = 0; i < polygon.triangles.Length; i += 3)
+            {
+                int[] indices = new int[] { polygon.triangles[i], polygon.triangles[i + 1], polygon.triangles[i + 2] };
+                Vector3[] tri = new Vector3[] { polygon.vertices[indices[0]], polygon.vertices[indices[1]], polygon.vertices[indices[2]] };
+                Vector3 normal = new Plane(tri[0], tri[1], tri[2]).normal;
+                Vector3[] normals = new Vector3[] { normal, normal, normal };
+                Vector2[] uvs = new Vector2[] { tri[0], tri[1], tri[2] };
+                builder.AddTriangleToMesh(tri, normals, uvs);
+            }
+
+            Mesh mesh = builder.Build();
+
+            gameObject.AddComponent<MeshFilter>().mesh = mesh;
+            gameObject.AddComponent<MeshRenderer>().material = new Material(Shader.Find("Diffuse"));
+        }
+    }
+}
+{% endhighlight %}
 
 Get the MeshBuilder class here <a href="/files/MeshBuilder.cs">MeshBuilder.cs</a>.
 
 <h2>TriangleAPI.cs</h2>
-<!-- code formatted by http://manoli.net/csharpformat/ -->
-<div class="csharpcode">
-<pre><span class="lnum">   1:  </span><span class="kwrd">using</span> UnityEngine;</pre>
-<pre><span class="lnum">   2:  </span><span class="kwrd">using</span> System.Collections;</pre>
-<pre><span class="lnum">   3:  </span><span class="kwrd">using</span> System.IO;</pre>
-<pre><span class="lnum">   4:  </span><span class="kwrd">using</span> System.Collections.Generic;</pre>
-<pre><span class="lnum">   5:  </span><span class="kwrd">using</span> System;</pre>
-<pre><span class="lnum">   6:  </span>&nbsp;</pre>
-<pre><span class="lnum">   7:  </span><span class="kwrd">public</span> <span class="kwrd">class</span> TriangleAPI {</pre>
-<pre><span class="lnum">   8:  </span>&nbsp;</pre>
-<pre><span class="lnum">   9:  </span>    <span class="rem">// Use this for initialization</span></pre>
-<pre><span class="lnum">  10:  </span>    <span class="kwrd">public</span> Polygon2D Triangulate(PSLG pslg)  {</pre>
-<pre><span class="lnum">  11:  </span>        <span class="kwrd">if</span> (pslg.vertices.Count == 0)</pre>
-<pre><span class="lnum">  12:  </span>        {</pre>
-<pre><span class="lnum">  13:  </span>            Debug.LogError(<span class="str">"No vertices passed to triangle. hole count: "</span> + pslg.holes.Count + <span class="str">", vert count: "</span> + pslg.vertices.Count);</pre>
-<pre><span class="lnum">  14:  </span>            <span class="kwrd">return</span> <span class="kwrd">new</span> Polygon2D(<span class="kwrd">new</span> <span class="kwrd">int</span>[] { }, <span class="kwrd">new</span> Vector2[] { });</pre>
-<pre><span class="lnum">  15:  </span>        }</pre>
-<pre><span class="lnum">  16:  </span>        <span class="kwrd">else</span> </pre>
-<pre><span class="lnum">  17:  </span>        {</pre>
-<pre><span class="lnum">  18:  </span>            <span class="rem">// Write poly file</span></pre>
-<pre><span class="lnum">  19:  </span>            WritePolyFile(pslg);</pre>
-<pre><span class="lnum">  20:  </span>        </pre>
-<pre><span class="lnum">  21:  </span>            <span class="rem">// Execute Triangle</span></pre>
-<pre><span class="lnum">  22:  </span>            ExecuteTriangle();</pre>
-<pre><span class="lnum">  23:  </span>        </pre>
-<pre><span class="lnum">  24:  </span>            <span class="rem">// Read outout</span></pre>
-<pre><span class="lnum">  25:  </span>            Vector2[] vertices = ReadVerticesFile();</pre>
-<pre><span class="lnum">  26:  </span>            <span class="kwrd">int</span>[] triangles = ReadTrianglesFile();</pre>
-<pre><span class="lnum">  27:  </span>        </pre>
-<pre><span class="lnum">  28:  </span>            CleanUp();</pre>
-<pre><span class="lnum">  29:  </span>&nbsp;</pre>
-<pre><span class="lnum">  30:  </span>            <span class="kwrd">return</span> <span class="kwrd">new</span> Polygon2D(triangles, vertices);</pre>
-<pre><span class="lnum">  31:  </span>        }</pre>
-<pre><span class="lnum">  32:  </span>    }</pre>
-<pre><span class="lnum">  33:  </span>&nbsp;</pre>
-<pre><span class="lnum">  34:  </span>    <span class="kwrd">void</span> WritePolyFile(PSLG pslg)</pre>
-<pre><span class="lnum">  35:  </span>    {</pre>
-<pre><span class="lnum">  36:  </span>        </pre>
-<pre><span class="lnum">  37:  </span>            </pre>
-<pre><span class="lnum">  38:  </span>        <span class="kwrd">try</span></pre>
-<pre><span class="lnum">  39:  </span>        {</pre>
-<pre><span class="lnum">  40:  </span>            <span class="kwrd">string</span> polyFilePath = <span class="str">"C:\\triangle\\polygon.poly"</span>;</pre>
-<pre><span class="lnum">  41:  </span>            <span class="kwrd">if</span> (File.Exists(polyFilePath))</pre>
-<pre><span class="lnum">  42:  </span>            {</pre>
-<pre><span class="lnum">  43:  </span>                File.Delete(polyFilePath);</pre>
-<pre><span class="lnum">  44:  </span>            }</pre>
-<pre><span class="lnum">  45:  </span>&nbsp;</pre>
-<pre><span class="lnum">  46:  </span>            <span class="kwrd">using</span> (StreamWriter sw = File.CreateText(polyFilePath))</pre>
-<pre><span class="lnum">  47:  </span>            {</pre>
-<pre><span class="lnum">  48:  </span>                sw.WriteLine(<span class="str">"# polygon.poly"</span>);</pre>
-<pre><span class="lnum">  49:  </span>                sw.WriteLine(<span class="str">"# generated by Unity Triangle API"</span>);</pre>
-<pre><span class="lnum">  50:  </span>                sw.WriteLine(<span class="str">"#"</span>);</pre>
-<pre><span class="lnum">  51:  </span>                <span class="rem">// Vertices</span></pre>
-<pre><span class="lnum">  52:  </span>                sw.WriteLine(pslg.GetNumberOfSegments() + <span class="str">" 2 0 1"</span>);</pre>
-<pre><span class="lnum">  53:  </span>                sw.WriteLine(<span class="str">"# The polyhedrons."</span>);</pre>
-<pre><span class="lnum">  54:  </span>                <span class="kwrd">int</span> boundaryMarker = 2;</pre>
-<pre><span class="lnum">  55:  </span>                <span class="kwrd">int</span> i;</pre>
-<pre><span class="lnum">  56:  </span>                <span class="kwrd">for</span> (i = 0; i &lt; pslg.vertices.Count; i++)</pre>
-<pre><span class="lnum">  57:  </span>                {</pre>
-<pre><span class="lnum">  58:  </span>                    <span class="kwrd">if</span> (i != 0 &amp;&amp; pslg.boundaryMarkersForPolygons.Contains(i))</pre>
-<pre><span class="lnum">  59:  </span>                    {</pre>
-<pre><span class="lnum">  60:  </span>                        boundaryMarker++;</pre>
-<pre><span class="lnum">  61:  </span>                    }</pre>
-<pre><span class="lnum">  62:  </span>                    sw.WriteLine(i + 1 + <span class="str">"\t"</span> + pslg.vertices[i].x + <span class="str">"\t"</span> + pslg.vertices[i].y + <span class="str">"\t"</span> + boundaryMarker);</pre>
-<pre><span class="lnum">  63:  </span>                }</pre>
-<pre><span class="lnum">  64:  </span>                <span class="kwrd">int</span> offset = i;</pre>
-<pre><span class="lnum">  65:  </span>                <span class="kwrd">for</span> (i = 0; i &lt; pslg.holes.Count; i++)</pre>
-<pre><span class="lnum">  66:  </span>                {</pre>
-<pre><span class="lnum">  67:  </span>                    sw.WriteLine(<span class="str">"# Hole #"</span> + (i + 1));</pre>
-<pre><span class="lnum">  68:  </span>                    <span class="kwrd">int</span> j;</pre>
-<pre><span class="lnum">  69:  </span>                    <span class="kwrd">for</span> (j = 0; j &lt; pslg.holes[i].vertices.Count; j++)</pre>
-<pre><span class="lnum">  70:  </span>                    {</pre>
-<pre><span class="lnum">  71:  </span>                        sw.WriteLine((offset + j + 1) + <span class="str">"\t"</span> + pslg.holes[i].vertices[j].x + <span class="str">"\t"</span> + pslg.holes[i].vertices[j].y + <span class="str">"\t"</span> + (boundaryMarker + i + 1));</pre>
-<pre><span class="lnum">  72:  </span>                    }</pre>
-<pre><span class="lnum">  73:  </span>                    offset += j;</pre>
-<pre><span class="lnum">  74:  </span>                }</pre>
-<pre><span class="lnum">  75:  </span>&nbsp;</pre>
-<pre><span class="lnum">  76:  </span>                <span class="rem">// Line segments</span></pre>
-<pre><span class="lnum">  77:  </span>                sw.WriteLine();</pre>
-<pre><span class="lnum">  78:  </span>                sw.WriteLine(<span class="str">"# Line segments."</span>);</pre>
-<pre><span class="lnum">  79:  </span>                sw.WriteLine(pslg.GetNumberOfSegments() + <span class="str">" 1"</span>);</pre>
-<pre><span class="lnum">  80:  </span>                sw.WriteLine(<span class="str">"# The polyhedrons."</span>);</pre>
-<pre><span class="lnum">  81:  </span>                boundaryMarker = 2;</pre>
-<pre><span class="lnum">  82:  </span>                <span class="kwrd">for</span> (i = 0; i &lt; pslg.segments.Count; i++)</pre>
-<pre><span class="lnum">  83:  </span>                {</pre>
-<pre><span class="lnum">  84:  </span>                    <span class="kwrd">if</span> (i != 0 &amp;&amp; pslg.boundaryMarkersForPolygons.Contains(i))</pre>
-<pre><span class="lnum">  85:  </span>                    {</pre>
-<pre><span class="lnum">  86:  </span>                        boundaryMarker++;</pre>
-<pre><span class="lnum">  87:  </span>                    }</pre>
-<pre><span class="lnum">  88:  </span>                    sw.WriteLine(i + 1 + <span class="str">"\t"</span> + (pslg.segments[i][0] + 1) + <span class="str">"\t"</span> + (pslg.segments[i][1] + 1) + <span class="str">"\t"</span> + boundaryMarker);</pre>
-<pre><span class="lnum">  89:  </span>                }</pre>
-<pre><span class="lnum">  90:  </span>                offset = i;</pre>
-<pre><span class="lnum">  91:  </span>                <span class="kwrd">for</span> (i = 0; i &lt; pslg.holes.Count; i++)</pre>
-<pre><span class="lnum">  92:  </span>                {</pre>
-<pre><span class="lnum">  93:  </span>                    sw.WriteLine(<span class="str">"# Hole #"</span> + (i + 1));</pre>
-<pre><span class="lnum">  94:  </span>                    <span class="kwrd">int</span> j;</pre>
-<pre><span class="lnum">  95:  </span>                    <span class="kwrd">for</span> (j = 0; j &lt; pslg.holes[i].segments.Count; j++)</pre>
-<pre><span class="lnum">  96:  </span>                    {</pre>
-<pre><span class="lnum">  97:  </span>                        sw.WriteLine((offset + j + 1) + <span class="str">"\t"</span> + (offset + 1 + pslg.holes[i].segments[j][0]) + <span class="str">"\t"</span> + (offset + 1 + pslg.holes[i].segments[j][1]) + <span class="str">"  "</span> + (boundaryMarker + i + 1));</pre>
-<pre><span class="lnum">  98:  </span>                    }</pre>
-<pre><span class="lnum">  99:  </span>                    offset += j;</pre>
-<pre><span class="lnum"> 100:  </span>                }</pre>
-<pre><span class="lnum"> 101:  </span>&nbsp;</pre>
-<pre><span class="lnum"> 102:  </span>                <span class="rem">// Holes</span></pre>
-<pre><span class="lnum"> 103:  </span>                sw.WriteLine();</pre>
-<pre><span class="lnum"> 104:  </span>                sw.WriteLine(<span class="str">"# Holes."</span>);</pre>
-<pre><span class="lnum"> 105:  </span>                sw.WriteLine(pslg.holes.Count);</pre>
-<pre><span class="lnum"> 106:  </span>                <span class="kwrd">for</span> (i = 0; i &lt; pslg.holes.Count; i++)</pre>
-<pre><span class="lnum"> 107:  </span>                {</pre>
-<pre><span class="lnum"> 108:  </span>                    Vector2 point = pslg.GetPointInHole(pslg.holes[i]);</pre>
-<pre><span class="lnum"> 109:  </span>                    sw.WriteLine((i + 1) + <span class="str">"\t"</span> + point.x + <span class="str">"\t"</span> + point.y + <span class="str">"\t # Hole #"</span> + (i + 1));</pre>
-<pre><span class="lnum"> 110:  </span>                }</pre>
-<pre><span class="lnum"> 111:  </span>                sw.Close();</pre>
-<pre><span class="lnum"> 112:  </span>            }</pre>
-<pre><span class="lnum"> 113:  </span>        }</pre>
-<pre><span class="lnum"> 114:  </span>        <span class="kwrd">catch</span> (Exception e)</pre>
-<pre><span class="lnum"> 115:  </span>        {</pre>
-<pre><span class="lnum"> 116:  </span>            Debug.LogException(e);</pre>
-<pre><span class="lnum"> 117:  </span>        }</pre>
-<pre><span class="lnum"> 118:  </span>    }</pre>
-<pre><span class="lnum"> 119:  </span>&nbsp;</pre>
-<pre><span class="lnum"> 120:  </span>    <span class="kwrd">void</span> ExecuteTriangle()</pre>
-<pre><span class="lnum"> 121:  </span>    {</pre>
-<pre><span class="lnum"> 122:  </span>        <span class="kwrd">try</span></pre>
-<pre><span class="lnum"> 123:  </span>        {</pre>
-<pre><span class="lnum"> 124:  </span>            System.Diagnostics.Process process = <span class="kwrd">new</span> System.Diagnostics.Process();</pre>
-<pre><span class="lnum"> 125:  </span>            process.StartInfo.FileName = <span class="str">"C:\\triangle\\triangle.exe"</span>;</pre>
-<pre><span class="lnum"> 126:  </span>            process.StartInfo.Arguments = <span class="str">"-pPq0 C:\\triangle\\polygon.poly"</span>;</pre>
-<pre><span class="lnum"> 127:  </span>            process.StartInfo.RedirectStandardOutput = <span class="kwrd">true</span>;</pre>
-<pre><span class="lnum"> 128:  </span>            process.StartInfo.UseShellExecute = <span class="kwrd">false</span>;</pre>
-<pre><span class="lnum"> 129:  </span>            process.StartInfo.CreateNoWindow = <span class="kwrd">true</span>;</pre>
-<pre><span class="lnum"> 130:  </span>            process.Start();</pre>
-<pre><span class="lnum"> 131:  </span>            </pre>
-<pre><span class="lnum"> 132:  </span>            <span class="rem">//string output = process.StandardOutput.ReadToEnd();</span></pre>
-<pre><span class="lnum"> 133:  </span>            <span class="rem">//Debug.Log(output);</span></pre>
-<pre><span class="lnum"> 134:  </span>            </pre>
-<pre><span class="lnum"> 135:  </span>            process.WaitForExit();</pre>
-<pre><span class="lnum"> 136:  </span>        }</pre>
-<pre><span class="lnum"> 137:  </span>        <span class="kwrd">catch</span> (System.Exception e)</pre>
-<pre><span class="lnum"> 138:  </span>        {</pre>
-<pre><span class="lnum"> 139:  </span>            Debug.LogException(e);</pre>
-<pre><span class="lnum"> 140:  </span>        }</pre>
-<pre><span class="lnum"> 141:  </span>    }</pre>
-<pre><span class="lnum"> 142:  </span>&nbsp;</pre>
-<pre><span class="lnum"> 143:  </span>    Vector2[] ReadVerticesFile()</pre>
-<pre><span class="lnum"> 144:  </span>    {</pre>
-<pre><span class="lnum"> 145:  </span>        Vector2[] vertices = <span class="kwrd">null</span>;</pre>
-<pre><span class="lnum"> 146:  </span>        <span class="kwrd">try</span></pre>
-<pre><span class="lnum"> 147:  </span>        {</pre>
-<pre><span class="lnum"> 148:  </span>            <span class="kwrd">string</span> outputVerticesFile = <span class="str">"C:\\triangle\\polygon.1.node"</span>;</pre>
-<pre><span class="lnum"> 149:  </span>&nbsp;</pre>
-<pre><span class="lnum"> 150:  </span>            StreamReader sr = File.OpenText(outputVerticesFile);</pre>
-<pre><span class="lnum"> 151:  </span>&nbsp;</pre>
-<pre><span class="lnum"> 152:  </span>            <span class="kwrd">string</span> line = sr.ReadLine();</pre>
-<pre><span class="lnum"> 153:  </span>            <span class="kwrd">int</span> n = line.IndexOf(<span class="str">"  "</span>);</pre>
-<pre><span class="lnum"> 154:  </span>            <span class="kwrd">int</span> nVerts = <span class="kwrd">int</span>.Parse(line.Substring(0, n));</pre>
-<pre><span class="lnum"> 155:  </span>            vertices = <span class="kwrd">new</span> Vector2[nVerts];</pre>
-<pre><span class="lnum"> 156:  </span>&nbsp;</pre>
-<pre><span class="lnum"> 157:  </span>            <span class="kwrd">int</span> whileCount = 0;</pre>
-<pre><span class="lnum"> 158:  </span>&nbsp;</pre>
-<pre><span class="lnum"> 159:  </span>            while ((line = sr.ReadLine()) != <span class="kwrd">null</span>)</pre>
-<pre><span class="lnum"> 160:  </span>            {</pre>
-<pre><span class="lnum"> 161:  </span>                <span class="kwrd">int</span> index = -1;</pre>
-<pre><span class="lnum"> 162:  </span>                <span class="kwrd">float</span> x = 0f;</pre>
-<pre><span class="lnum"> 163:  </span>                <span class="kwrd">float</span> y = 0f;</pre>
-<pre><span class="lnum"> 164:  </span>                <span class="kwrd">int</span> c = 0;</pre>
-<pre><span class="lnum"> 165:  </span>                <span class="kwrd">if</span> (!line.Contains(<span class="str">"#"</span>))</pre>
-<pre><span class="lnum"> 166:  </span>                {</pre>
-<pre><span class="lnum"> 167:  </span>                    <span class="kwrd">string</span>[] stringBits = line.Split(<span class="str">' '</span>);</pre>
-<pre><span class="lnum"> 168:  </span>&nbsp;</pre>
-<pre><span class="lnum"> 169:  </span>                    <span class="kwrd">foreach</span> (<span class="kwrd">string</span> s <span class="kwrd">in</span> stringBits)</pre>
-<pre><span class="lnum"> 170:  </span>                    {</pre>
-<pre><span class="lnum"> 171:  </span>                        <span class="kwrd">if</span> (s != <span class="str">""</span> &amp;&amp; s != <span class="str">" "</span>)</pre>
-<pre><span class="lnum"> 172:  </span>                        {</pre>
-<pre><span class="lnum"> 173:  </span>                            <span class="kwrd">if</span> (c == 0)</pre>
-<pre><span class="lnum"> 174:  </span>                                index = <span class="kwrd">int</span>.Parse(s);</pre>
-<pre><span class="lnum"> 175:  </span>                            <span class="kwrd">else</span> <span class="kwrd">if</span> (c == 1)</pre>
-<pre><span class="lnum"> 176:  </span>                                x = <span class="kwrd">float</span>.Parse(s);</pre>
-<pre><span class="lnum"> 177:  </span>                            <span class="kwrd">else</span> <span class="kwrd">if</span> (c == 2)</pre>
-<pre><span class="lnum"> 178:  </span>                                y = <span class="kwrd">float</span>.Parse(s);</pre>
-<pre><span class="lnum"> 179:  </span>&nbsp;</pre>
-<pre><span class="lnum"> 180:  </span>                            c++;</pre>
-<pre><span class="lnum"> 181:  </span>                        }</pre>
-<pre><span class="lnum"> 182:  </span>                    }</pre>
-<pre><span class="lnum"> 183:  </span>                }</pre>
-<pre><span class="lnum"> 184:  </span>&nbsp;</pre>
-<pre><span class="lnum"> 185:  </span>                <span class="kwrd">if</span> (index != -1)</pre>
-<pre><span class="lnum"> 186:  </span>                {</pre>
-<pre><span class="lnum"> 187:  </span>                    <span class="rem">//Debug.Log(index + " (" + x + ", " + y + ")");</span></pre>
-<pre><span class="lnum"> 188:  </span>                    vertices[index - 1] = <span class="kwrd">new</span> Vector2(x, y);</pre>
-<pre><span class="lnum"> 189:  </span>                }</pre>
-<pre><span class="lnum"> 190:  </span>&nbsp;</pre>
-<pre><span class="lnum"> 191:  </span>&nbsp;</pre>
-<pre><span class="lnum"> 192:  </span>                whileCount++;</pre>
-<pre><span class="lnum"> 193:  </span>                <span class="kwrd">if</span> (whileCount &gt; 1000)</pre>
-<pre><span class="lnum"> 194:  </span>                {</pre>
-<pre><span class="lnum"> 195:  </span>                    Debug.LogError(<span class="str">"Stuck in while loop"</span>);</pre>
-<pre><span class="lnum"> 196:  </span>                    <span class="kwrd">break</span>;</pre>
-<pre><span class="lnum"> 197:  </span>                }</pre>
-<pre><span class="lnum"> 198:  </span>            }</pre>
-<pre><span class="lnum"> 199:  </span>&nbsp;</pre>
-<pre><span class="lnum"> 200:  </span>            sr.Close();</pre>
-<pre><span class="lnum"> 201:  </span>        }</pre>
-<pre><span class="lnum"> 202:  </span>        <span class="kwrd">catch</span> (Exception e)</pre>
-<pre><span class="lnum"> 203:  </span>        {</pre>
-<pre><span class="lnum"> 204:  </span>            Debug.LogException(e);</pre>
-<pre><span class="lnum"> 205:  </span>        }</pre>
-<pre><span class="lnum"> 206:  </span>&nbsp;</pre>
-<pre><span class="lnum"> 207:  </span>        <span class="kwrd">return</span> vertices;</pre>
-<pre><span class="lnum"> 208:  </span>    }</pre>
-<pre><span class="lnum"> 209:  </span>&nbsp;</pre>
-<pre><span class="lnum"> 210:  </span>    <span class="kwrd">private</span> <span class="kwrd">int</span>[] ReadTrianglesFile()</pre>
-<pre><span class="lnum"> 211:  </span>    {</pre>
-<pre><span class="lnum"> 212:  </span>        List&lt;<span class="kwrd">int</span>&gt; triList = <span class="kwrd">null</span>;</pre>
-<pre><span class="lnum"> 213:  </span>        <span class="kwrd">try</span></pre>
-<pre><span class="lnum"> 214:  </span>        {</pre>
-<pre><span class="lnum"> 215:  </span>            <span class="kwrd">string</span> outputTrianglesFile = <span class="str">"C:\\triangle\\polygon.1.ele"</span>;</pre>
-<pre><span class="lnum"> 216:  </span>&nbsp;</pre>
-<pre><span class="lnum"> 217:  </span>            <span class="kwrd">using</span> (StreamReader sr = File.OpenText(outputTrianglesFile))</pre>
-<pre><span class="lnum"> 218:  </span>            {</pre>
-<pre><span class="lnum"> 219:  </span>&nbsp;</pre>
-<pre><span class="lnum"> 220:  </span>                <span class="kwrd">string</span> line = sr.ReadLine();</pre>
-<pre><span class="lnum"> 221:  </span>                <span class="kwrd">int</span> n = line.IndexOf(<span class="str">"  "</span>);</pre>
-<pre><span class="lnum"> 222:  </span>                <span class="kwrd">int</span> nTriangles = <span class="kwrd">int</span>.Parse(line.Substring(0, n));</pre>
-<pre><span class="lnum"> 223:  </span>                <span class="rem">//int[] triangles = new int[nTriangles * 3];</span></pre>
-<pre><span class="lnum"> 224:  </span>                triList = <span class="kwrd">new</span> List&lt;<span class="kwrd">int</span>&gt;(nTriangles * 3);</pre>
-<pre><span class="lnum"> 225:  </span>&nbsp;</pre>
-<pre><span class="lnum"> 226:  </span>                <span class="kwrd">int</span> count = 0;</pre>
-<pre><span class="lnum"> 227:  </span>&nbsp;</pre>
-<pre><span class="lnum"> 228:  </span>                while ((line = sr.ReadLine()) != <span class="kwrd">null</span>)</pre>
-<pre><span class="lnum"> 229:  </span>                {</pre>
-<pre><span class="lnum"> 230:  </span>                    <span class="kwrd">int</span> index = -1;</pre>
-<pre><span class="lnum"> 231:  </span>                    <span class="kwrd">int</span> c = 0;</pre>
-<pre><span class="lnum"> 232:  </span>                    <span class="kwrd">int</span>[] tri = <span class="kwrd">new</span> <span class="kwrd">int</span>[3];</pre>
-<pre><span class="lnum"> 233:  </span>                    <span class="kwrd">if</span> (!line.Contains(<span class="str">"#"</span>))</pre>
-<pre><span class="lnum"> 234:  </span>                    {</pre>
-<pre><span class="lnum"> 235:  </span>                        <span class="kwrd">string</span>[] stringBits = line.Split(<span class="str">' '</span>);</pre>
-<pre><span class="lnum"> 236:  </span>&nbsp;</pre>
-<pre><span class="lnum"> 237:  </span>                        <span class="kwrd">foreach</span> (<span class="kwrd">string</span> s <span class="kwrd">in</span> stringBits)</pre>
-<pre><span class="lnum"> 238:  </span>                        {</pre>
-<pre><span class="lnum"> 239:  </span>                            <span class="kwrd">if</span> (s != <span class="str">""</span> &amp;&amp; s != <span class="str">" "</span>)</pre>
-<pre><span class="lnum"> 240:  </span>                            {</pre>
-<pre><span class="lnum"> 241:  </span>                                <span class="kwrd">if</span> (c == 0)</pre>
-<pre><span class="lnum"> 242:  </span>                                    index = <span class="kwrd">int</span>.Parse(s);</pre>
-<pre><span class="lnum"> 243:  </span>                                <span class="kwrd">else</span> <span class="kwrd">if</span> (c == 1)</pre>
-<pre><span class="lnum"> 244:  </span>                                    tri[0] = <span class="kwrd">int</span>.Parse(s) - 1;</pre>
-<pre><span class="lnum"> 245:  </span>                                <span class="kwrd">else</span> <span class="kwrd">if</span> (c == 2)</pre>
-<pre><span class="lnum"> 246:  </span>                                    tri[1] = <span class="kwrd">int</span>.Parse(s) - 1;</pre>
-<pre><span class="lnum"> 247:  </span>                                <span class="kwrd">else</span> <span class="kwrd">if</span> (c == 3)</pre>
-<pre><span class="lnum"> 248:  </span>                                    tri[2] = <span class="kwrd">int</span>.Parse(s) - 1;</pre>
-<pre><span class="lnum"> 249:  </span>&nbsp;</pre>
-<pre><span class="lnum"> 250:  </span>                                c++;</pre>
-<pre><span class="lnum"> 251:  </span>                            }</pre>
-<pre><span class="lnum"> 252:  </span>                        }</pre>
-<pre><span class="lnum"> 253:  </span>                    }</pre>
-<pre><span class="lnum"> 254:  </span>&nbsp;</pre>
-<pre><span class="lnum"> 255:  </span>                    <span class="kwrd">if</span> (index != -1)</pre>
-<pre><span class="lnum"> 256:  </span>                    {</pre>
-<pre><span class="lnum"> 257:  </span>                        <span class="rem">//Debug.Log(index + " (" + tri[0] + ", " + tri[1] + ", " + tri[2] + ")");</span></pre>
-<pre><span class="lnum"> 258:  </span>                        triList.AddRange(tri);</pre>
-<pre><span class="lnum"> 259:  </span>                    }</pre>
-<pre><span class="lnum"> 260:  </span>&nbsp;</pre>
-<pre><span class="lnum"> 261:  </span>                    count++;</pre>
-<pre><span class="lnum"> 262:  </span>                    <span class="kwrd">if</span> (count &gt; 1000)</pre>
-<pre><span class="lnum"> 263:  </span>                    {</pre>
-<pre><span class="lnum"> 264:  </span>                        Debug.LogError(<span class="str">"Stuck in while loop"</span>);</pre>
-<pre><span class="lnum"> 265:  </span>                        <span class="kwrd">break</span>;</pre>
-<pre><span class="lnum"> 266:  </span>                    }</pre>
-<pre><span class="lnum"> 267:  </span>                }</pre>
-<pre><span class="lnum"> 268:  </span>&nbsp;</pre>
-<pre><span class="lnum"> 269:  </span>                sr.Close();</pre>
-<pre><span class="lnum"> 270:  </span>            }</pre>
-<pre><span class="lnum"> 271:  </span>        }</pre>
-<pre><span class="lnum"> 272:  </span>        <span class="kwrd">catch</span> (Exception e)</pre>
-<pre><span class="lnum"> 273:  </span>        {</pre>
-<pre><span class="lnum"> 274:  </span>            Debug.LogException(e);</pre>
-<pre><span class="lnum"> 275:  </span>        }</pre>
-<pre><span class="lnum"> 276:  </span>&nbsp;</pre>
-<pre><span class="lnum"> 277:  </span>        <span class="kwrd">return</span> triList.ToArray();</pre>
-<pre><span class="lnum"> 278:  </span>    }</pre>
-<pre><span class="lnum"> 279:  </span>&nbsp;</pre>
-<pre><span class="lnum"> 280:  </span>    <span class="kwrd">private</span> <span class="kwrd">void</span> CleanUp()</pre>
-<pre><span class="lnum"> 281:  </span>    {</pre>
-<pre><span class="lnum"> 282:  </span>        <span class="kwrd">try</span></pre>
-<pre><span class="lnum"> 283:  </span>        {</pre>
-<pre><span class="lnum"> 284:  </span>            File.Delete(<span class="str">"C:\\triangle\\polygon.1.ele"</span>);</pre>
-<pre><span class="lnum"> 285:  </span>            File.Delete(<span class="str">"C:\\triangle\\polygon.1.node"</span>);</pre>
-<pre><span class="lnum"> 286:  </span>            File.Delete(<span class="str">"C:\\triangle\\polygon.poly"</span>);</pre>
-<pre><span class="lnum"> 287:  </span>        }</pre>
-<pre><span class="lnum"> 288:  </span>        <span class="kwrd">catch</span> (Exception e)</pre>
-<pre><span class="lnum"> 289:  </span>        {</pre>
-<pre><span class="lnum"> 290:  </span>            Debug.LogException(e);</pre>
-<pre><span class="lnum"> 291:  </span>        }</pre>
-<pre><span class="lnum"> 292:  </span>    }</pre>
-<pre><span class="lnum"> 293:  </span>}</pre>
-</div>
+{% highlight c# %}
+using UnityEngine;
+using System.Collections;
+using System.IO;
+using System.Collections.Generic;
+using System;
+
+public class TriangleAPI {
+
+    // Use this for initialization
+    public Polygon2D Triangulate(PSLG pslg)  {
+        if (pslg.vertices.Count == 0)
+        {
+            Debug.LogError("No vertices passed to triangle. hole count: " + pslg.holes.Count + ", vert count: " + pslg.vertices.Count);
+            return new Polygon2D(new int[] { }, new Vector2[] { });
+        }
+        else 
+        {
+            // Write poly file
+            WritePolyFile(pslg);
+        
+            // Execute Triangle
+            ExecuteTriangle();
+        
+            // Read outout
+            Vector2[] vertices = ReadVerticesFile();
+            int[] triangles = ReadTrianglesFile();
+        
+            CleanUp();
+
+            return new Polygon2D(triangles, vertices);
+        }
+    }
+
+    void WritePolyFile(PSLG pslg)
+    {
+        
+            
+        try
+        {
+            string polyFilePath = "C:\\triangle\\polygon.poly";
+            if (File.Exists(polyFilePath))
+            {
+                File.Delete(polyFilePath);
+            }
+
+            using (StreamWriter sw = File.CreateText(polyFilePath))
+            {
+                sw.WriteLine("# polygon.poly");
+                sw.WriteLine("# generated by Unity Triangle API");
+                sw.WriteLine("#");
+                // Vertices
+                sw.WriteLine(pslg.GetNumberOfSegments() + " 2 0 1");
+                sw.WriteLine("# The polyhedrons.");
+                int boundaryMarker = 2;
+                int i;
+                for (i = 0; i < pslg.vertices.Count; i++)
+                {
+                    if (i != 0 && pslg.boundaryMarkersForPolygons.Contains(i))
+                    {
+                        boundaryMarker++;
+                    }
+                    sw.WriteLine(i + 1 + "\t" + pslg.vertices[i].x + "\t" + pslg.vertices[i].y + "\t" + boundaryMarker);
+                }
+                int offset = i;
+                for (i = 0; i < pslg.holes.Count; i++)
+                {
+                    sw.WriteLine("# Hole #" + (i + 1));
+                    int j;
+                    for (j = 0; j < pslg.holes[i].vertices.Count; j++)
+                    {
+                        sw.WriteLine((offset + j + 1) + "\t" + pslg.holes[i].vertices[j].x + "\t" + pslg.holes[i].vertices[j].y + "\t" + (boundaryMarker + i + 1));
+                    }
+                    offset += j;
+                }
+
+                // Line segments
+                sw.WriteLine();
+                sw.WriteLine("# Line segments.");
+                sw.WriteLine(pslg.GetNumberOfSegments() + " 1");
+                sw.WriteLine("# The polyhedrons.");
+                boundaryMarker = 2;
+                for (i = 0; i < pslg.segments.Count; i++)
+                {
+                    if (i != 0 && pslg.boundaryMarkersForPolygons.Contains(i))
+                    {
+                        boundaryMarker++;
+                    }
+                    sw.WriteLine(i + 1 + "\t" + (pslg.segments[i][0] + 1) + "\t" + (pslg.segments[i][1] + 1) + "\t" + boundaryMarker);
+                }
+                offset = i;
+                for (i = 0; i < pslg.holes.Count; i++)
+                {
+                    sw.WriteLine("# Hole #" + (i + 1));
+                    int j;
+                    for (j = 0; j < pslg.holes[i].segments.Count; j++)
+                    {
+                        sw.WriteLine((offset + j + 1) + "\t" + (offset + 1 + pslg.holes[i].segments[j][0]) + "\t" + (offset + 1 + pslg.holes[i].segments[j][1]) + "  " + (boundaryMarker + i + 1));
+                    }
+                    offset += j;
+                }
+
+                // Holes
+                sw.WriteLine();
+                sw.WriteLine("# Holes.");
+                sw.WriteLine(pslg.holes.Count);
+                for (i = 0; i < pslg.holes.Count; i++)
+                {
+                    Vector2 point = pslg.GetPointInHole(pslg.holes[i]);
+                    sw.WriteLine((i + 1) + "\t" + point.x + "\t" + point.y + "\t # Hole #" + (i + 1));
+                }
+                sw.Close();
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogException(e);
+        }
+    }
+
+    void ExecuteTriangle()
+    {
+        try
+        {
+            System.Diagnostics.Process process = new System.Diagnostics.Process();
+            process.StartInfo.FileName = "C:\\triangle\\triangle.exe";
+            process.StartInfo.Arguments = "-pPq0 C:\\triangle\\polygon.poly";
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.CreateNoWindow = true;
+            process.Start();
+            
+            //string output = process.StandardOutput.ReadToEnd();
+            //Debug.Log(output);
+            
+            process.WaitForExit();
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogException(e);
+        }
+    }
+
+    Vector2[] ReadVerticesFile()
+    {
+        Vector2[] vertices = null;
+        try
+        {
+            string outputVerticesFile = "C:\\triangle\\polygon.1.node";
+
+            StreamReader sr = File.OpenText(outputVerticesFile);
+
+            string line = sr.ReadLine();
+            int n = line.IndexOf("  ");
+            int nVerts = int.Parse(line.Substring(0, n));
+            vertices = new Vector2[nVerts];
+
+            int whileCount = 0;
+
+            while ((line = sr.ReadLine()) != null)
+            {
+                int index = -1;
+                float x = 0f;
+                float y = 0f;
+                int c = 0;
+                if (!line.Contains("#"))
+                {
+                    string[] stringBits = line.Split(' ');
+
+                    foreach (string s in stringBits)
+                    {
+                        if (s != "" && s != " ")
+                        {
+                            if (c == 0)
+                                index = int.Parse(s);
+                            else if (c == 1)
+                                x = float.Parse(s);
+                            else if (c == 2)
+                                y = float.Parse(s);
+
+                            c++;
+                        }
+                    }
+                }
+
+                if (index != -1)
+                {
+                    vertices[index - 1] = new Vector2(x, y);
+                }
+
+
+                whileCount++;
+                if (whileCount > 1000)
+                {
+                    Debug.LogError("Stuck in while loop");
+                    break;
+                }
+            }
+
+            sr.Close();
+        }
+        catch (Exception e)
+        {
+            Debug.LogException(e);
+        }
+
+        return vertices;
+    }
+
+    private int[] ReadTrianglesFile()
+    {
+        List<int> triList = null;
+        try
+        {
+            string outputTrianglesFile = "C:\\triangle\\polygon.1.ele";
+
+            using (StreamReader sr = File.OpenText(outputTrianglesFile))
+            {
+
+                string line = sr.ReadLine();
+                int n = line.IndexOf("  ");
+                int nTriangles = int.Parse(line.Substring(0, n));
+                //int[] triangles = new int[nTriangles * 3];
+                triList = new List<int>(nTriangles * 3);
+
+                int count = 0;
+
+                while ((line = sr.ReadLine()) != null)
+                {
+                    int index = -1;
+                    int c = 0;
+                    int[] tri = new int[3];
+                    if (!line.Contains("#"))
+                    {
+                        string[] stringBits = line.Split(' ');
+
+                        foreach (string s in stringBits)
+                        {
+                            if (s != "" && s != " ")
+                            {
+                                if (c == 0)
+                                    index = int.Parse(s);
+                                else if (c == 1)
+                                    tri[0] = int.Parse(s) - 1;
+                                else if (c == 2)
+                                    tri[1] = int.Parse(s) - 1;
+                                else if (c == 3)
+                                    tri[2] = int.Parse(s) - 1;
+
+                                c++;
+                            }
+                        }
+                    }
+
+                    if (index != -1)
+                    {
+                        triList.AddRange(tri);
+                    }
+
+                    count++;
+                    if (count > 1000)
+                    {
+                        Debug.LogError("Stuck in while loop");
+                        break;
+                    }
+                }
+
+                sr.Close();
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogException(e);
+        }
+
+        return triList.ToArray();
+    }
+
+    private void CleanUp()
+    {
+        try
+        {
+            File.Delete("C:\\triangle\\polygon.1.ele");
+            File.Delete("C:\\triangle\\polygon.1.node");
+            File.Delete("C:\\triangle\\polygon.poly");
+        }
+        catch (Exception e)
+        {
+            Debug.LogException(e);
+        }
+    }
+}
+
+{% endhighlight %}
 
 <h2>PSLG.cs</h2>
-<!-- code formatted by http://manoli.net/csharpformat/ -->
-<div class="csharpcode">
-<pre><span class="lnum">   1:  </span><span class="kwrd">using</span> UnityEngine;</pre>
-<pre><span class="lnum">   2:  </span><span class="kwrd">using</span> System.Collections;</pre>
-<pre><span class="lnum">   3:  </span><span class="kwrd">using</span> System.Collections.Generic;</pre>
-<pre><span class="lnum">   4:  </span>&nbsp;</pre>
-<pre><span class="lnum">   5:  </span><span class="kwrd">public</span> <span class="kwrd">class</span> PSLG {</pre>
-<pre><span class="lnum">   6:  </span>    <span class="kwrd">public</span> List&lt;Vector2&gt; vertices;</pre>
-<pre><span class="lnum">   7:  </span>    <span class="kwrd">public</span> List&lt;<span class="kwrd">int</span>[]&gt; segments;</pre>
-<pre><span class="lnum">   8:  </span>    <span class="kwrd">public</span> List&lt;PSLG&gt; holes;</pre>
-<pre><span class="lnum">   9:  </span>    <span class="kwrd">public</span> List&lt;<span class="kwrd">int</span>&gt; boundaryMarkersForPolygons;</pre>
-<pre><span class="lnum">  10:  </span>    </pre>
-<pre><span class="lnum">  11:  </span>    <span class="kwrd">public</span> PSLG()</pre>
-<pre><span class="lnum">  12:  </span>    {</pre>
-<pre><span class="lnum">  13:  </span>        vertices = <span class="kwrd">new</span> List&lt;Vector2&gt;();</pre>
-<pre><span class="lnum">  14:  </span>        segments = <span class="kwrd">new</span> List&lt;<span class="kwrd">int</span>[]&gt;();</pre>
-<pre><span class="lnum">  15:  </span>        holes = <span class="kwrd">new</span> List&lt;PSLG&gt;();</pre>
-<pre><span class="lnum">  16:  </span>        boundaryMarkersForPolygons = <span class="kwrd">new</span> List&lt;<span class="kwrd">int</span>&gt;();</pre>
-<pre><span class="lnum">  17:  </span>    }</pre>
-<pre><span class="lnum">  18:  </span>&nbsp;</pre>
-<pre><span class="lnum">  19:  </span>    <span class="kwrd">public</span> PSLG(List&lt;Vector2&gt; vertices) : <span class="kwrd">this</span>()</pre>
-<pre><span class="lnum">  20:  </span>    {</pre>
-<pre><span class="lnum">  21:  </span>        <span class="kwrd">this</span>.AddVertexLoop(vertices);</pre>
-<pre><span class="lnum">  22:  </span>    }</pre>
-<pre><span class="lnum">  23:  </span>    </pre>
-<pre><span class="lnum">  24:  </span>    <span class="kwrd">public</span> <span class="kwrd">void</span> AddVertexLoop(List&lt;Vector2&gt; vertices)</pre>
-<pre><span class="lnum">  25:  </span>    {</pre>
-<pre><span class="lnum">  26:  </span>        <span class="kwrd">if</span> (vertices.Count &lt; 3)</pre>
-<pre><span class="lnum">  27:  </span>        {</pre>
-<pre><span class="lnum">  28:  </span>            Debug.Log(<span class="str">"A vertex loop cannot have less than three vertices "</span> + vertices.Count);</pre>
-<pre><span class="lnum">  29:  </span>        }</pre>
-<pre><span class="lnum">  30:  </span>        <span class="kwrd">else</span></pre>
-<pre><span class="lnum">  31:  </span>        {</pre>
-<pre><span class="lnum">  32:  </span>            <span class="kwrd">this</span>.vertices.AddRange(vertices);</pre>
-<pre><span class="lnum">  33:  </span>            <span class="kwrd">int</span> segmentOffset = segments.Count;</pre>
-<pre><span class="lnum">  34:  </span>            boundaryMarkersForPolygons.Add(segments.Count);</pre>
-<pre><span class="lnum">  35:  </span>            <span class="kwrd">for</span>(<span class="kwrd">int</span> i = 0; i &lt; vertices.Count - 1; i++)</pre>
-<pre><span class="lnum">  36:  </span>            {</pre>
-<pre><span class="lnum">  37:  </span>                segments.Add(<span class="kwrd">new</span> <span class="kwrd">int</span>[] { i + segmentOffset, i + 1 + segmentOffset });</pre>
-<pre><span class="lnum">  38:  </span>            }</pre>
-<pre><span class="lnum">  39:  </span>            segments.Add(<span class="kwrd">new</span> <span class="kwrd">int</span>[] { vertices.Count - 1 + segmentOffset, segmentOffset });</pre>
-<pre><span class="lnum">  40:  </span>        }</pre>
-<pre><span class="lnum">  41:  </span>    }</pre>
-<pre><span class="lnum">  42:  </span>&nbsp;</pre>
-<pre><span class="lnum">  43:  </span>    <span class="kwrd">public</span> <span class="kwrd">void</span> AddOrderedVertices(Vector2[] vertices)</pre>
-<pre><span class="lnum">  44:  </span>    {</pre>
-<pre><span class="lnum">  45:  </span>        AddVertexLoop(<span class="kwrd">new</span> List&lt;Vector2&gt;(vertices));</pre>
-<pre><span class="lnum">  46:  </span>    }</pre>
-<pre><span class="lnum">  47:  </span>&nbsp;</pre>
-<pre><span class="lnum">  48:  </span>    <span class="kwrd">public</span> <span class="kwrd">void</span> AddHole(List&lt;Vector2&gt; vertices)</pre>
-<pre><span class="lnum">  49:  </span>    {</pre>
-<pre><span class="lnum">  50:  </span>        PSLG hole = <span class="kwrd">new</span> PSLG();</pre>
-<pre><span class="lnum">  51:  </span>        hole.AddVertexLoop(vertices);</pre>
-<pre><span class="lnum">  52:  </span>        holes.Add(hole);</pre>
-<pre><span class="lnum">  53:  </span>    }</pre>
-<pre><span class="lnum">  54:  </span>&nbsp;</pre>
-<pre><span class="lnum">  55:  </span>    <span class="kwrd">public</span> <span class="kwrd">void</span> AddHole(Vector2[] vertices)</pre>
-<pre><span class="lnum">  56:  </span>    {</pre>
-<pre><span class="lnum">  57:  </span>        AddHole(<span class="kwrd">new</span> List&lt;Vector2&gt;(vertices));</pre>
-<pre><span class="lnum">  58:  </span>    }</pre>
-<pre><span class="lnum">  59:  </span>&nbsp;</pre>
-<pre><span class="lnum">  60:  </span>    <span class="kwrd">public</span> <span class="kwrd">int</span> GetNumberOfSegments()</pre>
-<pre><span class="lnum">  61:  </span>    {</pre>
-<pre><span class="lnum">  62:  </span>        <span class="kwrd">int</span> offset = vertices.Count;</pre>
-<pre><span class="lnum">  63:  </span>        <span class="kwrd">foreach</span> (PSLG hole <span class="kwrd">in</span> holes)</pre>
-<pre><span class="lnum">  64:  </span>        {</pre>
-<pre><span class="lnum">  65:  </span>            offset += hole.segments.Count;</pre>
-<pre><span class="lnum">  66:  </span>        }</pre>
-<pre><span class="lnum">  67:  </span>&nbsp;</pre>
-<pre><span class="lnum">  68:  </span>        <span class="kwrd">return</span> offset;</pre>
-<pre><span class="lnum">  69:  </span>    }</pre>
-<pre><span class="lnum">  70:  </span>&nbsp;</pre>
-<pre><span class="lnum">  71:  </span>    <span class="kwrd">public</span> <span class="kwrd">bool</span> IsPointInPolygon(Vector2 point)</pre>
-<pre><span class="lnum">  72:  </span>    {</pre>
-<pre><span class="lnum">  73:  </span>        <span class="kwrd">int</span> j = segments.Count - 1;</pre>
-<pre><span class="lnum">  74:  </span>        <span class="kwrd">bool</span> oddNodes = <span class="kwrd">false</span>;</pre>
-<pre><span class="lnum">  75:  </span>&nbsp;</pre>
-<pre><span class="lnum">  76:  </span>        <span class="kwrd">for</span> (<span class="kwrd">int</span> i = 0; i &lt; segments.Count; i++)</pre>
-<pre><span class="lnum">  77:  </span>        {</pre>
-<pre><span class="lnum">  78:  </span>            <span class="kwrd">if</span> ((vertices[i].y &lt; point.y &amp;&amp; vertices[j].y &gt;= point.y</pre>
-<pre><span class="lnum">  79:  </span>            || vertices[j].y &lt; point.y &amp;&amp; vertices[i].y &gt;= point.y)</pre>
-<pre><span class="lnum">  80:  </span>            &amp;&amp; (vertices[i].x &lt;= point.x || vertices[j].x &lt;= point.x))</pre>
-<pre><span class="lnum">  81:  </span>            {</pre>
-<pre><span class="lnum">  82:  </span>                oddNodes ^= (vertices[i].x + (point.y - vertices[i].y) / (vertices[j].y - vertices[i].y) * (vertices[j].x - vertices[i].x) &lt; point.x);</pre>
-<pre><span class="lnum">  83:  </span>            }</pre>
-<pre><span class="lnum">  84:  </span>            j = i;</pre>
-<pre><span class="lnum">  85:  </span>        }</pre>
-<pre><span class="lnum">  86:  </span>&nbsp;</pre>
-<pre><span class="lnum">  87:  </span>        <span class="kwrd">return</span> oddNodes;</pre>
-<pre><span class="lnum">  88:  </span>    }</pre>
-<pre><span class="lnum">  89:  </span>&nbsp;</pre>
-<pre><span class="lnum">  90:  </span>    <span class="kwrd">public</span> Vector2 GetPointInPolygon()</pre>
-<pre><span class="lnum">  91:  </span>    {</pre>
-<pre><span class="lnum">  92:  </span>        <span class="kwrd">float</span> topMost = vertices[0].y;</pre>
-<pre><span class="lnum">  93:  </span>        <span class="kwrd">float</span> bottomMost = vertices[0].y;</pre>
-<pre><span class="lnum">  94:  </span>        <span class="kwrd">float</span> leftMost = vertices[0].x;</pre>
-<pre><span class="lnum">  95:  </span>        <span class="kwrd">float</span> rightMost = vertices[0].x;</pre>
-<pre><span class="lnum">  96:  </span>&nbsp;</pre>
-<pre><span class="lnum">  97:  </span>        <span class="kwrd">foreach</span> (Vector2 vertex <span class="kwrd">in</span> vertices)</pre>
-<pre><span class="lnum">  98:  </span>        {</pre>
-<pre><span class="lnum">  99:  </span>            <span class="kwrd">if</span> (vertex.y &gt; topMost)</pre>
-<pre><span class="lnum"> 100:  </span>                topMost = vertex.y;</pre>
-<pre><span class="lnum"> 101:  </span>            <span class="kwrd">if</span> (vertex.y &lt; bottomMost)</pre>
-<pre><span class="lnum"> 102:  </span>                bottomMost = vertex.y;</pre>
-<pre><span class="lnum"> 103:  </span>            <span class="kwrd">if</span> (vertex.x &lt; leftMost)</pre>
-<pre><span class="lnum"> 104:  </span>                leftMost = vertex.x;</pre>
-<pre><span class="lnum"> 105:  </span>            <span class="kwrd">if</span> (vertex.x &gt; rightMost)</pre>
-<pre><span class="lnum"> 106:  </span>                leftMost = vertex.x;</pre>
-<pre><span class="lnum"> 107:  </span>        }</pre>
-<pre><span class="lnum"> 108:  </span>        </pre>
-<pre><span class="lnum"> 109:  </span>        Vector2 point;</pre>
-<pre><span class="lnum"> 110:  </span>        </pre>
-<pre><span class="lnum"> 111:  </span>        <span class="kwrd">int</span> whileCount = 0;</pre>
-<pre><span class="lnum"> 112:  </span>        <span class="kwrd">do</span></pre>
-<pre><span class="lnum"> 113:  </span>        {</pre>
-<pre><span class="lnum"> 114:  </span>            point = <span class="kwrd">new</span> Vector2(Random.Range(leftMost, rightMost), Random.Range(bottomMost, topMost));</pre>
-<pre><span class="lnum"> 115:  </span>            whileCount++;</pre>
-<pre><span class="lnum"> 116:  </span>            <span class="kwrd">if</span> (whileCount &gt; 10000)</pre>
-<pre><span class="lnum"> 117:  </span>            {</pre>
-<pre><span class="lnum"> 118:  </span>                <span class="kwrd">string</span> polygonstring = <span class="str">""</span>;</pre>
-<pre><span class="lnum"> 119:  </span>                <span class="kwrd">foreach</span>(Vector2 vertex <span class="kwrd">in</span> vertices)</pre>
-<pre><span class="lnum"> 120:  </span>                {</pre>
-<pre><span class="lnum"> 121:  </span>                    polygonstring += vertex + <span class="str">", "</span>;    </pre>
-<pre><span class="lnum"> 122:  </span>                }</pre>
-<pre><span class="lnum"> 123:  </span>                Debug.LogError(<span class="str">"Stuck in while loop. Vertices: "</span> + polygonstring);</pre>
-<pre><span class="lnum"> 124:  </span>                <span class="kwrd">break</span>;</pre>
-<pre><span class="lnum"> 125:  </span>            }</pre>
-<pre><span class="lnum"> 126:  </span>        }</pre>
-<pre><span class="lnum"> 127:  </span>        while (!IsPointInPolygon(point));</pre>
-<pre><span class="lnum"> 128:  </span>&nbsp;</pre>
-<pre><span class="lnum"> 129:  </span>        <span class="kwrd">return</span> point;</pre>
-<pre><span class="lnum"> 130:  </span>    }</pre>
-<pre><span class="lnum"> 131:  </span>&nbsp;</pre>
-<pre><span class="lnum"> 132:  </span>    <span class="kwrd">public</span> Vector2 GetPointInHole(PSLG hole)</pre>
-<pre><span class="lnum"> 133:  </span>    {</pre>
-<pre><span class="lnum"> 134:  </span>        <span class="rem">// 10 Get point in hole</span></pre>
-<pre><span class="lnum"> 135:  </span>        <span class="rem">// 20 Is the point in a polygon that the hole is not in</span></pre>
-<pre><span class="lnum"> 136:  </span>        <span class="rem">// 30 if so goto 10 else return</span></pre>
-<pre><span class="lnum"> 137:  </span>        List&lt;PSLG&gt; polygons = <span class="kwrd">new</span> List&lt;PSLG&gt;();</pre>
-<pre><span class="lnum"> 138:  </span>        <span class="kwrd">for</span> (<span class="kwrd">int</span> i = 0; i &lt; boundaryMarkersForPolygons.Count; i++)</pre>
-<pre><span class="lnum"> 139:  </span>        {</pre>
-<pre><span class="lnum"> 140:  </span>            <span class="kwrd">int</span> startIndex = boundaryMarkersForPolygons[i];</pre>
-<pre><span class="lnum"> 141:  </span>            <span class="kwrd">int</span> endIndex = vertices.Count - 1;</pre>
-<pre><span class="lnum"> 142:  </span>            <span class="kwrd">if</span> (i &lt; boundaryMarkersForPolygons.Count - 1)</pre>
-<pre><span class="lnum"> 143:  </span>                endIndex = boundaryMarkersForPolygons[i + 1] - 1;</pre>
-<pre><span class="lnum"> 144:  </span>            polygons.Add(<span class="kwrd">new</span> PSLG(vertices.GetRange(startIndex, endIndex - startIndex + 1)));</pre>
-<pre><span class="lnum"> 145:  </span>        }</pre>
-<pre><span class="lnum"> 146:  </span>        </pre>
-<pre><span class="lnum"> 147:  </span>        <span class="kwrd">int</span> whileCount = 0;</pre>
-<pre><span class="lnum"> 148:  </span>&nbsp;</pre>
-<pre><span class="lnum"> 149:  </span>        Vector2 point;</pre>
-<pre><span class="lnum"> 150:  </span>        <span class="kwrd">bool</span> isPointGood;</pre>
-<pre><span class="lnum"> 151:  </span>        <span class="kwrd">do</span> </pre>
-<pre><span class="lnum"> 152:  </span>        {</pre>
-<pre><span class="lnum"> 153:  </span>            </pre>
-<pre><span class="lnum"> 154:  </span>            isPointGood = <span class="kwrd">true</span>;</pre>
-<pre><span class="lnum"> 155:  </span>            point = hole.GetPointInPolygon();</pre>
-<pre><span class="lnum"> 156:  </span>            <span class="kwrd">foreach</span> (PSLG polygon <span class="kwrd">in</span> polygons)</pre>
-<pre><span class="lnum"> 157:  </span>            {</pre>
-<pre><span class="lnum"> 158:  </span>                <span class="kwrd">string</span> polygonVertices = <span class="str">""</span>;</pre>
-<pre><span class="lnum"> 159:  </span>                <span class="kwrd">foreach</span> (Vector2 vertex <span class="kwrd">in</span> polygon.vertices)</pre>
-<pre><span class="lnum"> 160:  </span>                    polygonVertices += vertex + <span class="str">","</span>;</pre>
-<pre><span class="lnum"> 161:  </span>&nbsp;</pre>
-<pre><span class="lnum"> 162:  </span>                <span class="kwrd">if</span> (polygon.IsPointInPolygon(hole.vertices[0]))</pre>
-<pre><span class="lnum"> 163:  </span>                {</pre>
-<pre><span class="lnum"> 164:  </span>                    <span class="rem">// This polygon surrounds the hole, which is OK</span></pre>
-<pre><span class="lnum"> 165:  </span>                }</pre>
-<pre><span class="lnum"> 166:  </span>                <span class="kwrd">else</span> <span class="kwrd">if</span> (hole.IsPointInPolygon(polygon.vertices[0]))</pre>
-<pre><span class="lnum"> 167:  </span>                {</pre>
-<pre><span class="lnum"> 168:  </span>                    <span class="rem">// This polygon is within the hole</span></pre>
-<pre><span class="lnum"> 169:  </span>&nbsp;</pre>
-<pre><span class="lnum"> 170:  </span>                    <span class="kwrd">if</span> (polygon.IsPointInPolygon(point))</pre>
-<pre><span class="lnum"> 171:  </span>                    {</pre>
-<pre><span class="lnum"> 172:  </span>                        <span class="rem">// The point is within a polygon that is inside the hole, which is NOT OK</span></pre>
-<pre><span class="lnum"> 173:  </span>                        isPointGood = <span class="kwrd">false</span>;</pre>
-<pre><span class="lnum"> 174:  </span>                    }</pre>
-<pre><span class="lnum"> 175:  </span>                    <span class="kwrd">else</span></pre>
-<pre><span class="lnum"> 176:  </span>                    {</pre>
-<pre><span class="lnum"> 177:  </span>                        <span class="rem">// But the point was not within this polygon</span></pre>
-<pre><span class="lnum"> 178:  </span>                    }</pre>
-<pre><span class="lnum"> 179:  </span>                }</pre>
-<pre><span class="lnum"> 180:  </span>                <span class="kwrd">else</span></pre>
-<pre><span class="lnum"> 181:  </span>                {</pre>
-<pre><span class="lnum"> 182:  </span>                    <span class="rem">// This polygon is far away from the hole</span></pre>
-<pre><span class="lnum"> 183:  </span>                }</pre>
-<pre><span class="lnum"> 184:  </span>&nbsp;</pre>
-<pre><span class="lnum"> 185:  </span>            }</pre>
-<pre><span class="lnum"> 186:  </span>            whileCount++;</pre>
-<pre><span class="lnum"> 187:  </span>            <span class="kwrd">if</span> (whileCount &gt; 10000)</pre>
-<pre><span class="lnum"> 188:  </span>            {</pre>
-<pre><span class="lnum"> 189:  </span>                <span class="kwrd">string</span> holestring = <span class="str">""</span>;</pre>
-<pre><span class="lnum"> 190:  </span>                <span class="kwrd">foreach</span>(Vector2 vertex <span class="kwrd">in</span> hole.vertices)</pre>
-<pre><span class="lnum"> 191:  </span>                {</pre>
-<pre><span class="lnum"> 192:  </span>                    holestring += vertex + <span class="str">", "</span>;    </pre>
-<pre><span class="lnum"> 193:  </span>                }</pre>
-<pre><span class="lnum"> 194:  </span>                </pre>
-<pre><span class="lnum"> 195:  </span>                Debug.LogError(<span class="str">"Stuck in while loop. Hole vertices: "</span> + holestring);</pre>
-<pre><span class="lnum"> 196:  </span>                <span class="kwrd">break</span>;</pre>
-<pre><span class="lnum"> 197:  </span>            }</pre>
-<pre><span class="lnum"> 198:  </span>        }</pre>
-<pre><span class="lnum"> 199:  </span>        while (!isPointGood);</pre>
-<pre><span class="lnum"> 200:  </span>&nbsp;</pre>
-<pre><span class="lnum"> 201:  </span>        <span class="kwrd">return</span> point;</pre>
-<pre><span class="lnum"> 202:  </span>    }</pre>
-<pre><span class="lnum"> 203:  </span>}</pre>
-</div>
+{% highlight c# %}
+using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+
+public class PSLG {
+    public List<Vector2> vertices;
+    public List<int[]> segments;
+    public List<PSLG> holes;
+    public List<int> boundaryMarkersForPolygons;
+    
+    public PSLG()
+    {
+        vertices = new List<Vector2>();
+        segments = new List<int[]>();
+        holes = new List<PSLG>();
+        boundaryMarkersForPolygons = new List<int>();
+    }
+
+    public PSLG(List<Vector2> vertices) : this()
+    {
+        this.AddVertexLoop(vertices);
+    }
+    
+    public void AddVertexLoop(List<Vector2> vertices)
+    {
+        if (vertices.Count < 3)
+        {
+            Debug.Log("A vertex loop cannot have less than three vertices " + vertices.Count);
+        }
+        else
+        {
+            this.vertices.AddRange(vertices);
+            int segmentOffset = segments.Count;
+            boundaryMarkersForPolygons.Add(segments.Count);
+            for(int i = 0; i < vertices.Count - 1; i++)
+            {
+                segments.Add(new int[] { i + segmentOffset, i + 1 + segmentOffset });
+            }
+            segments.Add(new int[] { vertices.Count - 1 + segmentOffset, segmentOffset });
+        }
+    }
+
+    public void AddOrderedVertices(Vector2[] vertices)
+    {
+        AddVertexLoop(new List<Vector2>(vertices));
+    }
+
+    public void AddHole(List<Vector2> vertices)
+    {
+        PSLG hole = new PSLG();
+        hole.AddVertexLoop(vertices);
+        holes.Add(hole);
+    }
+
+    public void AddHole(Vector2[] vertices)
+    {
+        AddHole(new List<Vector2>(vertices));
+    }
+
+    public int GetNumberOfSegments()
+    {
+        int offset = vertices.Count;
+        foreach (PSLG hole in holes)
+        {
+            offset += hole.segments.Count;
+        }
+
+        return offset;
+    }
+
+    public bool IsPointInPolygon(Vector2 point)
+    {
+        int j = segments.Count - 1;
+        bool oddNodes = false;
+
+        for (int i = 0; i < segments.Count; i++)
+        {
+            if ((vertices[i].y < point.y && vertices[j].y >= point.y
+            || vertices[j].y < point.y && vertices[i].y >= point.y)
+            && (vertices[i].x <= point.x || vertices[j].x <= point.x))
+            {
+                oddNodes ^= (vertices[i].x + (point.y - vertices[i].y) / (vertices[j].y - vertices[i].y) * (vertices[j].x - vertices[i].x) < point.x);
+            }
+            j = i;
+        }
+
+        return oddNodes;
+    }
+
+    public Vector2 GetPointInPolygon()
+    {
+        float topMost = vertices[0].y;
+        float bottomMost = vertices[0].y;
+        float leftMost = vertices[0].x;
+        float rightMost = vertices[0].x;
+
+        foreach (Vector2 vertex in vertices)
+        {
+            if (vertex.y > topMost)
+                topMost = vertex.y;
+            if (vertex.y < bottomMost)
+                bottomMost = vertex.y;
+            if (vertex.x < leftMost)
+                leftMost = vertex.x;
+            if (vertex.x > rightMost)
+                leftMost = vertex.x;
+        }
+        
+        Vector2 point;
+        
+        int whileCount = 0;
+        do
+        {
+            point = new Vector2(Random.Range(leftMost, rightMost), Random.Range(bottomMost, topMost));
+            whileCount++;
+            if (whileCount > 10000)
+            {
+                string polygonstring = "";
+                foreach(Vector2 vertex in vertices)
+                {
+                    polygonstring += vertex + ", "; 
+                }
+                Debug.LogError("Stuck in while loop. Vertices: " + polygonstring);
+                break;
+            }
+        }
+        while (!IsPointInPolygon(point));
+
+        return point;
+    }
+
+    public Vector2 GetPointInHole(PSLG hole)
+    {
+        // 10 Get point in hole
+        // 20 Is the point in a polygon that the hole is not in
+        // 30 if so goto 10 else return
+        List<PSLG> polygons = new List<PSLG>();
+        for (int i = 0; i < boundaryMarkersForPolygons.Count; i++)
+        {
+            int startIndex = boundaryMarkersForPolygons[i];
+            int endIndex = vertices.Count - 1;
+            if (i < boundaryMarkersForPolygons.Count - 1)
+                endIndex = boundaryMarkersForPolygons[i + 1] - 1;
+            polygons.Add(new PSLG(vertices.GetRange(startIndex, endIndex - startIndex + 1)));
+        }
+        
+        int whileCount = 0;
+
+        Vector2 point;
+        bool isPointGood;
+        do 
+        {
+            
+            isPointGood = true;
+            point = hole.GetPointInPolygon();
+            foreach (PSLG polygon in polygons)
+            {
+                string polygonVertices = "";
+                foreach (Vector2 vertex in polygon.vertices)
+                    polygonVertices += vertex + ",";
+
+                if (polygon.IsPointInPolygon(hole.vertices[0]))
+                {
+                    // This polygon surrounds the hole, which is OK
+                }
+                else if (hole.IsPointInPolygon(polygon.vertices[0]))
+                {
+                    // This polygon is within the hole
+
+                    if (polygon.IsPointInPolygon(point))
+                    {
+                        // The point is within a polygon that is inside the hole, which is NOT OK
+                        isPointGood = false;
+                    }
+                    else
+                    {
+                        // But the point was not within this polygon
+                    }
+                }
+                else
+                {
+                    // This polygon is far away from the hole
+                }
+
+            }
+            whileCount++;
+            if (whileCount > 10000)
+            {
+                string holestring = "";
+                foreach(Vector2 vertex in hole.vertices)
+                {
+                    holestring += vertex + ", ";    
+                }
+                
+                Debug.LogError("Stuck in while loop. Hole vertices: " + holestring);
+                break;
+            }
+        }
+        while (!isPointGood);
+
+        return point;
+    }
+}
+{% endhighlight %}
 
 <h2>Polygon2D.cs</h2>
-<!-- code formatted by http://manoli.net/csharpformat/ -->
-<div class="csharpcode">
-<pre><span class="lnum">   1:  </span><span class="kwrd">using</span> UnityEngine;</pre>
-<pre><span class="lnum">   2:  </span><span class="kwrd">using</span> System.Collections;</pre>
-<pre><span class="lnum">   3:  </span>&nbsp;</pre>
-<pre><span class="lnum">   4:  </span><span class="kwrd">public</span> <span class="kwrd">class</span> Polygon2D {</pre>
-<pre><span class="lnum">   5:  </span>&nbsp;</pre>
-<pre><span class="lnum">   6:  </span>    <span class="kwrd">public</span> <span class="kwrd">int</span>[] triangles;</pre>
-<pre><span class="lnum">   7:  </span>    <span class="kwrd">public</span> Vector2[] vertices;</pre>
-<pre><span class="lnum">   8:  </span>&nbsp;</pre>
-<pre><span class="lnum">   9:  </span>    <span class="kwrd">public</span> Polygon2D(<span class="kwrd">int</span>[] triangle, Vector2[] vertices)</pre>
-<pre><span class="lnum">  10:  </span>    {</pre>
-<pre><span class="lnum">  11:  </span>        <span class="kwrd">this</span>.triangles = triangle;</pre>
-<pre><span class="lnum">  12:  </span>        <span class="kwrd">this</span>.vertices = vertices;</pre>
-<pre><span class="lnum">  13:  </span>    }</pre>
-<pre><span class="lnum">  14:  </span>}</pre>
-</div>
+{% highlight c# %}
+using UnityEngine;
+using System.Collections;
+
+public class Polygon2D {
+
+    public int[] triangles;
+    public Vector2[] vertices;
+
+    public Polygon2D(int[] triangle, Vector2[] vertices)
+    {
+        this.triangles = triangle;
+        this.vertices = vertices;
+    }
+}
+{% endhighlight %}
 
 <h2>Feedback</h2>
 If you found this useful and/or if you have feedback, please let me know <a href="https://twitter.com/mathmos_">@mathmos_</a>.
