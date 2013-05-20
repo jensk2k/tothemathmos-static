@@ -1,0 +1,90 @@
+body {
+	/*font:12px Tahoma;*/
+	font-size: 12px;
+	font-family: Verdana, Helvetica, serif;
+	margin: 0;
+	background:url(../images/bg.jpg) 50% 0 repeat-y white;
+	background-attachment: fixed;
+	background-repeat: no-repeat;
+}
+
+#everything {
+	margin:0 auto;
+	width: 1000px;
+	background:url(../images/white-transparent.png);
+}
+
+	#header {
+		height: 150px; 
+		width: 1000px;
+		/*background:url(banner.jpg) right no-repeat;*/
+	}
+
+	#middle {
+		clear:both;
+		padding:5px 10px;
+	}
+		#left_column {
+			/*padding: 5px 10px;*/
+			width:195px; float:left;
+		}
+			#navigation a {
+				background-color:#444444;
+				width:170px; 
+				height:25px; 
+				display:block; 
+				padding-left:25px; 
+				margin:5px 0;
+				font-size:13px; 
+				color:white; 
+				text-decoration:none; 
+				line-height:25px;
+			}
+			#navigation a:hover{
+				background-color:#888888;
+			}
+		#middle_column {
+			float: left;
+			width: 75%;
+			margin: 0px 20px;
+		}
+			#page_title {
+				font-size: 32px; 
+				border-bottom: 1px solid #BBBBBB; 
+				margin-bottom: 10px;
+			}
+			.blog_post {
+				/*margin: 10px 0;
+				padding: 5px 10px;*/
+				margin-bottom:35px; 
+				line-height:18px; 
+				background:url(../images/white-transparent.png);
+			}
+			.blog_post h1{
+				padding:2px 10px; 
+				margin:0;
+				font-size:20px;
+				border-bottom: 1px solid #aaaaaa;
+			}
+			.blog_post_body { 
+				padding:5px 15px;
+			}
+			.blog_postedby { float:left; clear:both; }
+			.blog_timestamp { float:right }
+			
+			.imagebox { float:left }
+				.imagebox .caption { text-align:center; font-style:italic; padding: 10px; }
+			
+			.games_group {float: left}
+                .game { background: url(../images/crosshatch.gif);  width: 235px; line-height:18px; float: left; margin: 10px 5px} 
+				.game h1 { background:url(../images/title_3.gif) repeat-x; padding:2px 10px; margin:0; font-size: 20px; color:black;} 
+				.game_body { padding:5px }
+					.game_body image { text-align: center; }
+			.cvtable td {padding-right: 10px; padding-bottom:10px}
+			/*.leftcvbox { float:left; width: 250px;}
+			.rightcvbox { float:left; width: 400px;}*/
+			
+	#footer {
+		clear: both;
+		padding: 20px;
+	}
