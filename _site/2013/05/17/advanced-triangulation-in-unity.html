@@ -44,585 +44,589 @@
     <div class='caption'>
     The triangulated result.
     </div>
-</div><!--<div style="clear:both"></div>--><!-- more --><p>The way works is that you produce the polygon outline in the form of a planar straight line graph (a PSLG) using the PSLG class. This is passed to a program called <a href='http://www.cs.cmu.edu/~quake/triangle.html'>Triangle</a>, which performs the actual triangulation. Download a compiled version for Windows <a href='/files/triangle.exe'>here</a> and place it in the directory C:\Triangle\ .</p><h2>Usage</h2><div class='highlight'><pre><code class='c#'><span class='k'>using</span> <span class='nn'>UnityEngine</span><span class='p'>;</span>
-<span class='k'>using</span> <span class='nn'>System.Collections</span><span class='p'>;</span>
-<span class='k'>using</span> <span class='nn'>System.Collections.Generic</span><span class='p'>;</span>
+</div><!--<div style="clear:both"></div>--><!-- more --><p>The way works is that you produce the polygon outline in the form of a planar straight line graph (a PSLG) using the PSLG class. This is passed to a program called <a href='http://www.cs.cmu.edu/~quake/triangle.html'>Triangle</a>, which performs the actual triangulation. Download a compiled version for Windows <a href='/files/triangle.exe'>here</a> and place it in the directory C:\Triangle\ .</p><h2>Usage</h2><div>
+    <pre><code class='c#'>using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
-<span class='k'>public</span> <span class='k'>class</span> <span class='nc'>TestTriangleAPI</span> <span class='p'>:</span> <span class='n'>MonoBehaviour</span> <span class='p'>{</span>
+public class TestTriangleAPI : MonoBehaviour {
 
-    <span class='c1'>// Use this for initialization</span>
-    <span class='k'>void</span> <span class='nf'>Start</span> <span class='p'>()</span> <span class='p'>{</span>
-        <span class='k'>if</span> <span class='p'>(</span><span class='n'>gameObject</span><span class='p'>.</span><span class='n'>activeSelf</span><span class='p'>)</span>
-        <span class='p'>{</span>
-            <span class='n'>List</span><span class='p'>&lt;</span><span class='n'>Vector2</span><span class='p'>&gt;</span> <span class='n'>testVertices1</span> <span class='p'>=</span> <span class='k'>new</span> <span class='n'>List</span><span class='p'>&lt;</span><span class='n'>Vector2</span><span class='p'>&gt;(</span><span class='m'>6</span><span class='p'>);</span>
-            <span class='n'>testVertices1</span><span class='p'>.</span><span class='n'>Add</span><span class='p'>(</span><span class='k'>new</span> <span class='n'>Vector2</span><span class='p'>(</span><span class='m'>1f</span><span class='p'>,</span> <span class='m'>0f</span><span class='p'>));</span>
-            <span class='n'>testVertices1</span><span class='p'>.</span><span class='n'>Add</span><span class='p'>(</span><span class='k'>new</span> <span class='n'>Vector2</span><span class='p'>(</span><span class='m'>0f</span><span class='p'>,</span> <span class='m'>6f</span><span class='p'>));</span>
-            <span class='n'>testVertices1</span><span class='p'>.</span><span class='n'>Add</span><span class='p'>(</span><span class='k'>new</span> <span class='n'>Vector2</span><span class='p'>(</span><span class='m'>3f</span><span class='p'>,</span> <span class='m'>5f</span><span class='p'>));</span>
-            <span class='n'>testVertices1</span><span class='p'>.</span><span class='n'>Add</span><span class='p'>(</span><span class='k'>new</span> <span class='n'>Vector2</span><span class='p'>(</span><span class='m'>4f</span><span class='p'>,</span> <span class='m'>7f</span><span class='p'>));</span>
-            <span class='n'>testVertices1</span><span class='p'>.</span><span class='n'>Add</span><span class='p'>(</span><span class='k'>new</span> <span class='n'>Vector2</span><span class='p'>(</span><span class='m'>6f</span><span class='p'>,</span> <span class='m'>6f</span><span class='p'>));</span>
-            <span class='n'>testVertices1</span><span class='p'>.</span><span class='n'>Add</span><span class='p'>(</span><span class='k'>new</span> <span class='n'>Vector2</span><span class='p'>(</span><span class='m'>6.5f</span><span class='p'>,</span> <span class='m'>2f</span><span class='p'>));</span>
+    // Use this for initialization
+    void Start () {
+        if (gameObject.activeSelf)
+        {
+            List&lt;Vector2&gt; testVertices1 = new List&lt;Vector2&gt;(6);
+            testVertices1.Add(new Vector2(1f, 0f));
+            testVertices1.Add(new Vector2(0f, 6f));
+            testVertices1.Add(new Vector2(3f, 5f));
+            testVertices1.Add(new Vector2(4f, 7f));
+            testVertices1.Add(new Vector2(6f, 6f));
+            testVertices1.Add(new Vector2(6.5f, 2f));
 
-            <span class='n'>List</span><span class='p'>&lt;</span><span class='n'>Vector2</span><span class='p'>&gt;</span> <span class='n'>testVertices2</span> <span class='p'>=</span> <span class='k'>new</span> <span class='n'>List</span><span class='p'>&lt;</span><span class='n'>Vector2</span><span class='p'>&gt;(</span><span class='m'>3</span><span class='p'>);</span>
-            <span class='n'>testVertices2</span><span class='p'>.</span><span class='n'>Add</span><span class='p'>(</span><span class='k'>new</span> <span class='n'>Vector2</span><span class='p'>(</span><span class='m'>1.5f</span><span class='p'>,</span> <span class='m'>6.5f</span><span class='p'>));</span>
-            <span class='n'>testVertices2</span><span class='p'>.</span><span class='n'>Add</span><span class='p'>(</span><span class='k'>new</span> <span class='n'>Vector2</span><span class='p'>(</span><span class='m'>2.25f</span><span class='p'>,</span> <span class='m'>8f</span><span class='p'>));</span>
-            <span class='n'>testVertices2</span><span class='p'>.</span><span class='n'>Add</span><span class='p'>(</span><span class='k'>new</span> <span class='n'>Vector2</span><span class='p'>(</span><span class='m'>3.25f</span><span class='p'>,</span> <span class='m'>6.25f</span><span class='p'>));</span>
+            List&lt;Vector2&gt; testVertices2 = new List&lt;Vector2&gt;(3);
+            testVertices2.Add(new Vector2(1.5f, 6.5f));
+            testVertices2.Add(new Vector2(2.25f, 8f));
+            testVertices2.Add(new Vector2(3.25f, 6.25f));
 
-            <span class='n'>List</span><span class='p'>&lt;</span><span class='n'>Vector2</span><span class='p'>&gt;</span> <span class='n'>hole1</span> <span class='p'>=</span> <span class='k'>new</span> <span class='n'>List</span><span class='p'>&lt;</span><span class='n'>Vector2</span><span class='p'>&gt;(</span><span class='m'>5</span><span class='p'>);</span>
-            <span class='n'>hole1</span><span class='p'>.</span><span class='n'>Add</span><span class='p'>(</span><span class='k'>new</span> <span class='n'>Vector2</span><span class='p'>(</span><span class='m'>3.5f</span><span class='p'>,</span> <span class='m'>3</span><span class='p'>));</span>
-            <span class='n'>hole1</span><span class='p'>.</span><span class='n'>Add</span><span class='p'>(</span><span class='k'>new</span> <span class='n'>Vector2</span><span class='p'>(</span><span class='m'>4.5f</span><span class='p'>,</span> <span class='m'>2.5f</span><span class='p'>));</span>
-            <span class='n'>hole1</span><span class='p'>.</span><span class='n'>Add</span><span class='p'>(</span><span class='k'>new</span> <span class='n'>Vector2</span><span class='p'>(</span><span class='m'>5.5f</span><span class='p'>,</span> <span class='m'>3.5f</span><span class='p'>));</span>
-            <span class='n'>hole1</span><span class='p'>.</span><span class='n'>Add</span><span class='p'>(</span><span class='k'>new</span> <span class='n'>Vector2</span><span class='p'>(</span><span class='m'>5f</span><span class='p'>,</span> <span class='m'>4f</span><span class='p'>));</span>
-            <span class='n'>hole1</span><span class='p'>.</span><span class='n'>Add</span><span class='p'>(</span><span class='k'>new</span> <span class='n'>Vector2</span><span class='p'>(</span><span class='m'>4f</span><span class='p'>,</span> <span class='m'>4f</span><span class='p'>));</span>
+            List&lt;Vector2&gt; hole1 = new List&lt;Vector2&gt;(5);
+            hole1.Add(new Vector2(3.5f, 3));
+            hole1.Add(new Vector2(4.5f, 2.5f));
+            hole1.Add(new Vector2(5.5f, 3.5f));
+            hole1.Add(new Vector2(5f, 4f));
+            hole1.Add(new Vector2(4f, 4f));
 
-            <span class='n'>PSLG</span> <span class='n'>testPSLG</span> <span class='p'>=</span> <span class='k'>new</span> <span class='n'>PSLG</span><span class='p'>();</span>
-            <span class='n'>testPSLG</span><span class='p'>.</span><span class='n'>AddVertexLoop</span><span class='p'>(</span><span class='n'>testVertices1</span><span class='p'>);</span>
-            <span class='n'>testPSLG</span><span class='p'>.</span><span class='n'>AddVertexLoop</span><span class='p'>(</span><span class='n'>testVertices2</span><span class='p'>);</span>
-            <span class='n'>testPSLG</span><span class='p'>.</span><span class='n'>AddHole</span><span class='p'>(</span><span class='n'>hole1</span><span class='p'>);</span>
+            PSLG testPSLG = new PSLG();
+            testPSLG.AddVertexLoop(testVertices1);
+            testPSLG.AddVertexLoop(testVertices2);
+            testPSLG.AddHole(hole1);
 
-            <span class='n'>TriangleAPI</span> <span class='n'>triangle</span> <span class='p'>=</span> <span class='k'>new</span> <span class='n'>TriangleAPI</span><span class='p'>();</span>
-            <span class='n'>Polygon2D</span> <span class='n'>polygon</span> <span class='p'>=</span> <span class='n'>triangle</span><span class='p'>.</span><span class='n'>Triangulate</span><span class='p'>(</span><span class='n'>testPSLG</span><span class='p'>);</span>
-            <span class='kt'>string</span> <span class='n'>tris</span> <span class='p'>=</span> <span class='n'>polygon</span><span class='p'>.</span><span class='n'>triangles</span><span class='p'>.</span><span class='n'>Length</span> <span class='p'>/</span> <span class='m'>3</span> <span class='p'>+</span> <span class='s'>&quot;: &quot;</span><span class='p'>;</span>
-            <span class='k'>foreach</span> <span class='p'>(</span><span class='kt'>int</span> <span class='n'>i</span> <span class='k'>in</span> <span class='n'>polygon</span><span class='p'>.</span><span class='n'>triangles</span><span class='p'>)</span>
-            <span class='p'>{</span>
-                <span class='n'>tris</span> <span class='p'>+=</span> <span class='n'>i</span> <span class='p'>+</span> <span class='s'>&quot;, &quot;</span><span class='p'>;</span>
-            <span class='p'>}</span>
+            TriangleAPI triangle = new TriangleAPI();
+            Polygon2D polygon = triangle.Triangulate(testPSLG);
+            string tris = polygon.triangles.Length / 3 + &quot;: &quot;;
+            foreach (int i in polygon.triangles)
+            {
+                tris += i + &quot;, &quot;;
+            }
             
-            <span class='kt'>string</span> <span class='n'>verts</span> <span class='p'>=</span> <span class='n'>polygon</span><span class='p'>.</span><span class='n'>vertices</span><span class='p'>.</span><span class='n'>Length</span> <span class='p'>+</span> <span class='s'>&quot;: &quot;</span><span class='p'>;</span>
-            <span class='k'>foreach</span> <span class='p'>(</span><span class='n'>Vector2</span> <span class='n'>i</span> <span class='k'>in</span> <span class='n'>polygon</span><span class='p'>.</span><span class='n'>vertices</span><span class='p'>)</span>
-            <span class='p'>{</span>
-                <span class='n'>verts</span> <span class='p'>+=</span> <span class='n'>i</span> <span class='p'>+</span> <span class='s'>&quot;, &quot;</span><span class='p'>;</span>
-            <span class='p'>}</span>
+            string verts = polygon.vertices.Length + &quot;: &quot;;
+            foreach (Vector2 i in polygon.vertices)
+            {
+                verts += i + &quot;, &quot;;
+            }
 
-            <span class='n'>MeshBuilder</span> <span class='n'>builder</span> <span class='p'>=</span> <span class='k'>new</span> <span class='n'>MeshBuilder</span><span class='p'>();</span>
+            MeshBuilder builder = new MeshBuilder();
 
-            <span class='k'>for</span> <span class='p'>(</span><span class='kt'>int</span> <span class='n'>i</span> <span class='p'>=</span> <span class='m'>0</span><span class='p'>;</span> <span class='n'>i</span> <span class='p'>&lt;</span> <span class='n'>polygon</span><span class='p'>.</span><span class='n'>triangles</span><span class='p'>.</span><span class='n'>Length</span><span class='p'>;</span> <span class='n'>i</span> <span class='p'>+=</span> <span class='m'>3</span><span class='p'>)</span>
-            <span class='p'>{</span>
-                <span class='kt'>int</span><span class='p'>[]</span> <span class='n'>indices</span> <span class='p'>=</span> <span class='k'>new</span> <span class='kt'>int</span><span class='p'>[]</span> <span class='p'>{</span> <span class='n'>polygon</span><span class='p'>.</span><span class='n'>triangles</span><span class='p'>[</span><span class='n'>i</span><span class='p'>],</span> <span class='n'>polygon</span><span class='p'>.</span><span class='n'>triangles</span><span class='p'>[</span><span class='n'>i</span> <span class='p'>+</span> <span class='m'>1</span><span class='p'>],</span> <span class='n'>polygon</span><span class='p'>.</span><span class='n'>triangles</span><span class='p'>[</span><span class='n'>i</span> <span class='p'>+</span> <span class='m'>2</span><span class='p'>]</span> <span class='p'>};</span>
-                <span class='n'>Vector3</span><span class='p'>[]</span> <span class='n'>tri</span> <span class='p'>=</span> <span class='k'>new</span> <span class='n'>Vector3</span><span class='p'>[]</span> <span class='p'>{</span> <span class='n'>polygon</span><span class='p'>.</span><span class='n'>vertices</span><span class='p'>[</span><span class='n'>indices</span><span class='p'>[</span><span class='m'>0</span><span class='p'>]],</span> <span class='n'>polygon</span><span class='p'>.</span><span class='n'>vertices</span><span class='p'>[</span><span class='n'>indices</span><span class='p'>[</span><span class='m'>1</span><span class='p'>]],</span> <span class='n'>polygon</span><span class='p'>.</span><span class='n'>vertices</span><span class='p'>[</span><span class='n'>indices</span><span class='p'>[</span><span class='m'>2</span><span class='p'>]]</span> <span class='p'>};</span>
-                <span class='n'>Vector3</span> <span class='n'>normal</span> <span class='p'>=</span> <span class='k'>new</span> <span class='n'>Plane</span><span class='p'>(</span><span class='n'>tri</span><span class='p'>[</span><span class='m'>0</span><span class='p'>],</span> <span class='n'>tri</span><span class='p'>[</span><span class='m'>1</span><span class='p'>],</span> <span class='n'>tri</span><span class='p'>[</span><span class='m'>2</span><span class='p'>]).</span><span class='n'>normal</span><span class='p'>;</span>
-                <span class='n'>Vector3</span><span class='p'>[]</span> <span class='n'>normals</span> <span class='p'>=</span> <span class='k'>new</span> <span class='n'>Vector3</span><span class='p'>[]</span> <span class='p'>{</span> <span class='n'>normal</span><span class='p'>,</span> <span class='n'>normal</span><span class='p'>,</span> <span class='n'>normal</span> <span class='p'>};</span>
-                <span class='n'>Vector2</span><span class='p'>[]</span> <span class='n'>uvs</span> <span class='p'>=</span> <span class='k'>new</span> <span class='n'>Vector2</span><span class='p'>[]</span> <span class='p'>{</span> <span class='n'>tri</span><span class='p'>[</span><span class='m'>0</span><span class='p'>],</span> <span class='n'>tri</span><span class='p'>[</span><span class='m'>1</span><span class='p'>],</span> <span class='n'>tri</span><span class='p'>[</span><span class='m'>2</span><span class='p'>]</span> <span class='p'>};</span>
-                <span class='n'>builder</span><span class='p'>.</span><span class='n'>AddTriangleToMesh</span><span class='p'>(</span><span class='n'>tri</span><span class='p'>,</span> <span class='n'>normals</span><span class='p'>,</span> <span class='n'>uvs</span><span class='p'>);</span>
-            <span class='p'>}</span>
+            for (int i = 0; i &lt; polygon.triangles.Length; i += 3)
+            {
+                int[] indices = new int[] { polygon.triangles[i], polygon.triangles[i + 1], polygon.triangles[i + 2] };
+                Vector3[] tri = new Vector3[] { polygon.vertices[indices[0]], polygon.vertices[indices[1]], polygon.vertices[indices[2]] };
+                Vector3 normal = new Plane(tri[0], tri[1], tri[2]).normal;
+                Vector3[] normals = new Vector3[] { normal, normal, normal };
+                Vector2[] uvs = new Vector2[] { tri[0], tri[1], tri[2] };
+                builder.AddTriangleToMesh(tri, normals, uvs);
+            }
 
-            <span class='n'>Mesh</span> <span class='n'>mesh</span> <span class='p'>=</span> <span class='n'>builder</span><span class='p'>.</span><span class='n'>Build</span><span class='p'>();</span>
+            Mesh mesh = builder.Build();
 
-            <span class='n'>gameObject</span><span class='p'>.</span><span class='n'>AddComponent</span><span class='p'>&lt;</span><span class='n'>MeshFilter</span><span class='p'>&gt;().</span><span class='n'>mesh</span> <span class='p'>=</span> <span class='n'>mesh</span><span class='p'>;</span>
-            <span class='n'>gameObject</span><span class='p'>.</span><span class='n'>AddComponent</span><span class='p'>&lt;</span><span class='n'>MeshRenderer</span><span class='p'>&gt;().</span><span class='n'>material</span> <span class='p'>=</span> <span class='k'>new</span> <span class='n'>Material</span><span class='p'>(</span><span class='n'>Shader</span><span class='p'>.</span><span class='n'>Find</span><span class='p'>(</span><span class='s'>&quot;Diffuse&quot;</span><span class='p'>));</span>
-        <span class='p'>}</span>
-    <span class='p'>}</span>
-<span class='p'>}</span>
-</code></pre></div>
+            gameObject.AddComponent&lt;MeshFilter&gt;().mesh = mesh;
+            gameObject.AddComponent&lt;MeshRenderer&gt;().material = new Material(Shader.Find(&quot;Diffuse&quot;));
+        }
+    }
+}</code></pre>
+  </div>
 <p>Get the MeshBuilder class here <a href='/files/MeshBuilder.cs'>MeshBuilder.cs</a>.</p>
-<h2>TriangleAPI.cs</h2><div class='highlight'><pre><code class='c#'><span class='k'>using</span> <span class='nn'>UnityEngine</span><span class='p'>;</span>
-<span class='k'>using</span> <span class='nn'>System.Collections</span><span class='p'>;</span>
-<span class='k'>using</span> <span class='nn'>System.IO</span><span class='p'>;</span>
-<span class='k'>using</span> <span class='nn'>System.Collections.Generic</span><span class='p'>;</span>
-<span class='k'>using</span> <span class='nn'>System</span><span class='p'>;</span>
+<h2>TriangleAPI.cs</h2><div>
+    <pre><code class='c#'>using UnityEngine;
+using System.Collections;
+using System.IO;
+using System.Collections.Generic;
+using System;
 
-<span class='k'>public</span> <span class='k'>class</span> <span class='nc'>TriangleAPI</span> <span class='p'>{</span>
+public class TriangleAPI {
 
-    <span class='c1'>// Use this for initialization</span>
-    <span class='k'>public</span> <span class='n'>Polygon2D</span> <span class='nf'>Triangulate</span><span class='p'>(</span><span class='n'>PSLG</span> <span class='n'>pslg</span><span class='p'>)</span>  <span class='p'>{</span>
-        <span class='k'>if</span> <span class='p'>(</span><span class='n'>pslg</span><span class='p'>.</span><span class='n'>vertices</span><span class='p'>.</span><span class='n'>Count</span> <span class='p'>==</span> <span class='m'>0</span><span class='p'>)</span>
-        <span class='p'>{</span>
-            <span class='n'>Debug</span><span class='p'>.</span><span class='n'>LogError</span><span class='p'>(</span><span class='s'>&quot;No vertices passed to triangle. hole count: &quot;</span> <span class='p'>+</span> <span class='n'>pslg</span><span class='p'>.</span><span class='n'>holes</span><span class='p'>.</span><span class='n'>Count</span> <span class='p'>+</span> <span class='s'>&quot;, vert count: &quot;</span> <span class='p'>+</span> <span class='n'>pslg</span><span class='p'>.</span><span class='n'>vertices</span><span class='p'>.</span><span class='n'>Count</span><span class='p'>);</span>
-            <span class='k'>return</span> <span class='k'>new</span> <span class='nf'>Polygon2D</span><span class='p'>(</span><span class='k'>new</span> <span class='kt'>int</span><span class='p'>[]</span> <span class='p'>{</span> <span class='p'>},</span> <span class='k'>new</span> <span class='n'>Vector2</span><span class='p'>[]</span> <span class='p'>{</span> <span class='p'>});</span>
-        <span class='p'>}</span>
-        <span class='k'>else</span> 
-        <span class='p'>{</span>
-            <span class='c1'>// Write poly file</span>
-            <span class='n'>WritePolyFile</span><span class='p'>(</span><span class='n'>pslg</span><span class='p'>);</span>
+    // Use this for initialization
+    public Polygon2D Triangulate(PSLG pslg)  {
+        if (pslg.vertices.Count == 0)
+        {
+            Debug.LogError(&quot;No vertices passed to triangle. hole count: &quot; + pslg.holes.Count + &quot;, vert count: &quot; + pslg.vertices.Count);
+            return new Polygon2D(new int[] { }, new Vector2[] { });
+        }
+        else 
+        {
+            // Write poly file
+            WritePolyFile(pslg);
         
-            <span class='c1'>// Execute Triangle</span>
-            <span class='n'>ExecuteTriangle</span><span class='p'>();</span>
+            // Execute Triangle
+            ExecuteTriangle();
         
-            <span class='c1'>// Read outout</span>
-            <span class='n'>Vector2</span><span class='p'>[]</span> <span class='n'>vertices</span> <span class='p'>=</span> <span class='n'>ReadVerticesFile</span><span class='p'>();</span>
-            <span class='kt'>int</span><span class='p'>[]</span> <span class='n'>triangles</span> <span class='p'>=</span> <span class='n'>ReadTrianglesFile</span><span class='p'>();</span>
+            // Read outout
+            Vector2[] vertices = ReadVerticesFile();
+            int[] triangles = ReadTrianglesFile();
         
-            <span class='n'>CleanUp</span><span class='p'>();</span>
+            CleanUp();
 
-            <span class='k'>return</span> <span class='k'>new</span> <span class='nf'>Polygon2D</span><span class='p'>(</span><span class='n'>triangles</span><span class='p'>,</span> <span class='n'>vertices</span><span class='p'>);</span>
-        <span class='p'>}</span>
-    <span class='p'>}</span>
+            return new Polygon2D(triangles, vertices);
+        }
+    }
 
-    <span class='k'>void</span> <span class='nf'>WritePolyFile</span><span class='p'>(</span><span class='n'>PSLG</span> <span class='n'>pslg</span><span class='p'>)</span>
-    <span class='p'>{</span>
+    void WritePolyFile(PSLG pslg)
+    {
         
             
-        <span class='k'>try</span>
-        <span class='p'>{</span>
-            <span class='kt'>string</span> <span class='n'>polyFilePath</span> <span class='p'>=</span> <span class='s'>&quot;C:\\triangle\\polygon.poly&quot;</span><span class='p'>;</span>
-            <span class='k'>if</span> <span class='p'>(</span><span class='n'>File</span><span class='p'>.</span><span class='n'>Exists</span><span class='p'>(</span><span class='n'>polyFilePath</span><span class='p'>))</span>
-            <span class='p'>{</span>
-                <span class='n'>File</span><span class='p'>.</span><span class='n'>Delete</span><span class='p'>(</span><span class='n'>polyFilePath</span><span class='p'>);</span>
-            <span class='p'>}</span>
+        try
+        {
+            string polyFilePath = &quot;C:\\triangle\\polygon.poly&quot;;
+            if (File.Exists(polyFilePath))
+            {
+                File.Delete(polyFilePath);
+            }
 
-            <span class='k'>using</span> <span class='p'>(</span><span class='n'>StreamWriter</span> <span class='n'>sw</span> <span class='p'>=</span> <span class='n'>File</span><span class='p'>.</span><span class='n'>CreateText</span><span class='p'>(</span><span class='n'>polyFilePath</span><span class='p'>))</span>
-            <span class='p'>{</span>
-                <span class='n'>sw</span><span class='p'>.</span><span class='n'>WriteLine</span><span class='p'>(</span><span class='s'>&quot;# polygon.poly&quot;</span><span class='p'>);</span>
-                <span class='n'>sw</span><span class='p'>.</span><span class='n'>WriteLine</span><span class='p'>(</span><span class='s'>&quot;# generated by Unity Triangle API&quot;</span><span class='p'>);</span>
-                <span class='n'>sw</span><span class='p'>.</span><span class='n'>WriteLine</span><span class='p'>(</span><span class='s'>&quot;#&quot;</span><span class='p'>);</span>
-                <span class='c1'>// Vertices</span>
-                <span class='n'>sw</span><span class='p'>.</span><span class='n'>WriteLine</span><span class='p'>(</span><span class='n'>pslg</span><span class='p'>.</span><span class='n'>GetNumberOfSegments</span><span class='p'>()</span> <span class='p'>+</span> <span class='s'>&quot; 2 0 1&quot;</span><span class='p'>);</span>
-                <span class='n'>sw</span><span class='p'>.</span><span class='n'>WriteLine</span><span class='p'>(</span><span class='s'>&quot;# The polyhedrons.&quot;</span><span class='p'>);</span>
-                <span class='kt'>int</span> <span class='n'>boundaryMarker</span> <span class='p'>=</span> <span class='m'>2</span><span class='p'>;</span>
-                <span class='kt'>int</span> <span class='n'>i</span><span class='p'>;</span>
-                <span class='k'>for</span> <span class='p'>(</span><span class='n'>i</span> <span class='p'>=</span> <span class='m'>0</span><span class='p'>;</span> <span class='n'>i</span> <span class='p'>&lt;</span> <span class='n'>pslg</span><span class='p'>.</span><span class='n'>vertices</span><span class='p'>.</span><span class='n'>Count</span><span class='p'>;</span> <span class='n'>i</span><span class='p'>++)</span>
-                <span class='p'>{</span>
-                    <span class='k'>if</span> <span class='p'>(</span><span class='n'>i</span> <span class='p'>!=</span> <span class='m'>0</span> <span class='p'>&amp;&amp;</span> <span class='n'>pslg</span><span class='p'>.</span><span class='n'>boundaryMarkersForPolygons</span><span class='p'>.</span><span class='n'>Contains</span><span class='p'>(</span><span class='n'>i</span><span class='p'>))</span>
-                    <span class='p'>{</span>
-                        <span class='n'>boundaryMarker</span><span class='p'>++;</span>
-                    <span class='p'>}</span>
-                    <span class='n'>sw</span><span class='p'>.</span><span class='n'>WriteLine</span><span class='p'>(</span><span class='n'>i</span> <span class='p'>+</span> <span class='m'>1</span> <span class='p'>+</span> <span class='s'>&quot;\t&quot;</span> <span class='p'>+</span> <span class='n'>pslg</span><span class='p'>.</span><span class='n'>vertices</span><span class='p'>[</span><span class='n'>i</span><span class='p'>].</span><span class='n'>x</span> <span class='p'>+</span> <span class='s'>&quot;\t&quot;</span> <span class='p'>+</span> <span class='n'>pslg</span><span class='p'>.</span><span class='n'>vertices</span><span class='p'>[</span><span class='n'>i</span><span class='p'>].</span><span class='n'>y</span> <span class='p'>+</span> <span class='s'>&quot;\t&quot;</span> <span class='p'>+</span> <span class='n'>boundaryMarker</span><span class='p'>);</span>
-                <span class='p'>}</span>
-                <span class='kt'>int</span> <span class='n'>offset</span> <span class='p'>=</span> <span class='n'>i</span><span class='p'>;</span>
-                <span class='k'>for</span> <span class='p'>(</span><span class='n'>i</span> <span class='p'>=</span> <span class='m'>0</span><span class='p'>;</span> <span class='n'>i</span> <span class='p'>&lt;</span> <span class='n'>pslg</span><span class='p'>.</span><span class='n'>holes</span><span class='p'>.</span><span class='n'>Count</span><span class='p'>;</span> <span class='n'>i</span><span class='p'>++)</span>
-                <span class='p'>{</span>
-                    <span class='n'>sw</span><span class='p'>.</span><span class='n'>WriteLine</span><span class='p'>(</span><span class='s'>&quot;# Hole #&quot;</span> <span class='p'>+</span> <span class='p'>(</span><span class='n'>i</span> <span class='p'>+</span> <span class='m'>1</span><span class='p'>));</span>
-                    <span class='kt'>int</span> <span class='n'>j</span><span class='p'>;</span>
-                    <span class='k'>for</span> <span class='p'>(</span><span class='n'>j</span> <span class='p'>=</span> <span class='m'>0</span><span class='p'>;</span> <span class='n'>j</span> <span class='p'>&lt;</span> <span class='n'>pslg</span><span class='p'>.</span><span class='n'>holes</span><span class='p'>[</span><span class='n'>i</span><span class='p'>].</span><span class='n'>vertices</span><span class='p'>.</span><span class='n'>Count</span><span class='p'>;</span> <span class='n'>j</span><span class='p'>++)</span>
-                    <span class='p'>{</span>
-                        <span class='n'>sw</span><span class='p'>.</span><span class='n'>WriteLine</span><span class='p'>((</span><span class='n'>offset</span> <span class='p'>+</span> <span class='n'>j</span> <span class='p'>+</span> <span class='m'>1</span><span class='p'>)</span> <span class='p'>+</span> <span class='s'>&quot;\t&quot;</span> <span class='p'>+</span> <span class='n'>pslg</span><span class='p'>.</span><span class='n'>holes</span><span class='p'>[</span><span class='n'>i</span><span class='p'>].</span><span class='n'>vertices</span><span class='p'>[</span><span class='n'>j</span><span class='p'>].</span><span class='n'>x</span> <span class='p'>+</span> <span class='s'>&quot;\t&quot;</span> <span class='p'>+</span> <span class='n'>pslg</span><span class='p'>.</span><span class='n'>holes</span><span class='p'>[</span><span class='n'>i</span><span class='p'>].</span><span class='n'>vertices</span><span class='p'>[</span><span class='n'>j</span><span class='p'>].</span><span class='n'>y</span> <span class='p'>+</span> <span class='s'>&quot;\t&quot;</span> <span class='p'>+</span> <span class='p'>(</span><span class='n'>boundaryMarker</span> <span class='p'>+</span> <span class='n'>i</span> <span class='p'>+</span> <span class='m'>1</span><span class='p'>));</span>
-                    <span class='p'>}</span>
-                    <span class='n'>offset</span> <span class='p'>+=</span> <span class='n'>j</span><span class='p'>;</span>
-                <span class='p'>}</span>
+            using (StreamWriter sw = File.CreateText(polyFilePath))
+            {
+                sw.WriteLine(&quot;# polygon.poly&quot;);
+                sw.WriteLine(&quot;# generated by Unity Triangle API&quot;);
+                sw.WriteLine(&quot;#&quot;);
+                // Vertices
+                sw.WriteLine(pslg.GetNumberOfSegments() + &quot; 2 0 1&quot;);
+                sw.WriteLine(&quot;# The polyhedrons.&quot;);
+                int boundaryMarker = 2;
+                int i;
+                for (i = 0; i &lt; pslg.vertices.Count; i++)
+                {
+                    if (i != 0 &amp;&amp; pslg.boundaryMarkersForPolygons.Contains(i))
+                    {
+                        boundaryMarker++;
+                    }
+                    sw.WriteLine(i + 1 + &quot;\t&quot; + pslg.vertices[i].x + &quot;\t&quot; + pslg.vertices[i].y + &quot;\t&quot; + boundaryMarker);
+                }
+                int offset = i;
+                for (i = 0; i &lt; pslg.holes.Count; i++)
+                {
+                    sw.WriteLine(&quot;# Hole #&quot; + (i + 1));
+                    int j;
+                    for (j = 0; j &lt; pslg.holes[i].vertices.Count; j++)
+                    {
+                        sw.WriteLine((offset + j + 1) + &quot;\t&quot; + pslg.holes[i].vertices[j].x + &quot;\t&quot; + pslg.holes[i].vertices[j].y + &quot;\t&quot; + (boundaryMarker + i + 1));
+                    }
+                    offset += j;
+                }
 
-                <span class='c1'>// Line segments</span>
-                <span class='n'>sw</span><span class='p'>.</span><span class='n'>WriteLine</span><span class='p'>();</span>
-                <span class='n'>sw</span><span class='p'>.</span><span class='n'>WriteLine</span><span class='p'>(</span><span class='s'>&quot;# Line segments.&quot;</span><span class='p'>);</span>
-                <span class='n'>sw</span><span class='p'>.</span><span class='n'>WriteLine</span><span class='p'>(</span><span class='n'>pslg</span><span class='p'>.</span><span class='n'>GetNumberOfSegments</span><span class='p'>()</span> <span class='p'>+</span> <span class='s'>&quot; 1&quot;</span><span class='p'>);</span>
-                <span class='n'>sw</span><span class='p'>.</span><span class='n'>WriteLine</span><span class='p'>(</span><span class='s'>&quot;# The polyhedrons.&quot;</span><span class='p'>);</span>
-                <span class='n'>boundaryMarker</span> <span class='p'>=</span> <span class='m'>2</span><span class='p'>;</span>
-                <span class='k'>for</span> <span class='p'>(</span><span class='n'>i</span> <span class='p'>=</span> <span class='m'>0</span><span class='p'>;</span> <span class='n'>i</span> <span class='p'>&lt;</span> <span class='n'>pslg</span><span class='p'>.</span><span class='n'>segments</span><span class='p'>.</span><span class='n'>Count</span><span class='p'>;</span> <span class='n'>i</span><span class='p'>++)</span>
-                <span class='p'>{</span>
-                    <span class='k'>if</span> <span class='p'>(</span><span class='n'>i</span> <span class='p'>!=</span> <span class='m'>0</span> <span class='p'>&amp;&amp;</span> <span class='n'>pslg</span><span class='p'>.</span><span class='n'>boundaryMarkersForPolygons</span><span class='p'>.</span><span class='n'>Contains</span><span class='p'>(</span><span class='n'>i</span><span class='p'>))</span>
-                    <span class='p'>{</span>
-                        <span class='n'>boundaryMarker</span><span class='p'>++;</span>
-                    <span class='p'>}</span>
-                    <span class='n'>sw</span><span class='p'>.</span><span class='n'>WriteLine</span><span class='p'>(</span><span class='n'>i</span> <span class='p'>+</span> <span class='m'>1</span> <span class='p'>+</span> <span class='s'>&quot;\t&quot;</span> <span class='p'>+</span> <span class='p'>(</span><span class='n'>pslg</span><span class='p'>.</span><span class='n'>segments</span><span class='p'>[</span><span class='n'>i</span><span class='p'>][</span><span class='m'>0</span><span class='p'>]</span> <span class='p'>+</span> <span class='m'>1</span><span class='p'>)</span> <span class='p'>+</span> <span class='s'>&quot;\t&quot;</span> <span class='p'>+</span> <span class='p'>(</span><span class='n'>pslg</span><span class='p'>.</span><span class='n'>segments</span><span class='p'>[</span><span class='n'>i</span><span class='p'>][</span><span class='m'>1</span><span class='p'>]</span> <span class='p'>+</span> <span class='m'>1</span><span class='p'>)</span> <span class='p'>+</span> <span class='s'>&quot;\t&quot;</span> <span class='p'>+</span> <span class='n'>boundaryMarker</span><span class='p'>);</span>
-                <span class='p'>}</span>
-                <span class='n'>offset</span> <span class='p'>=</span> <span class='n'>i</span><span class='p'>;</span>
-                <span class='k'>for</span> <span class='p'>(</span><span class='n'>i</span> <span class='p'>=</span> <span class='m'>0</span><span class='p'>;</span> <span class='n'>i</span> <span class='p'>&lt;</span> <span class='n'>pslg</span><span class='p'>.</span><span class='n'>holes</span><span class='p'>.</span><span class='n'>Count</span><span class='p'>;</span> <span class='n'>i</span><span class='p'>++)</span>
-                <span class='p'>{</span>
-                    <span class='n'>sw</span><span class='p'>.</span><span class='n'>WriteLine</span><span class='p'>(</span><span class='s'>&quot;# Hole #&quot;</span> <span class='p'>+</span> <span class='p'>(</span><span class='n'>i</span> <span class='p'>+</span> <span class='m'>1</span><span class='p'>));</span>
-                    <span class='kt'>int</span> <span class='n'>j</span><span class='p'>;</span>
-                    <span class='k'>for</span> <span class='p'>(</span><span class='n'>j</span> <span class='p'>=</span> <span class='m'>0</span><span class='p'>;</span> <span class='n'>j</span> <span class='p'>&lt;</span> <span class='n'>pslg</span><span class='p'>.</span><span class='n'>holes</span><span class='p'>[</span><span class='n'>i</span><span class='p'>].</span><span class='n'>segments</span><span class='p'>.</span><span class='n'>Count</span><span class='p'>;</span> <span class='n'>j</span><span class='p'>++)</span>
-                    <span class='p'>{</span>
-                        <span class='n'>sw</span><span class='p'>.</span><span class='n'>WriteLine</span><span class='p'>((</span><span class='n'>offset</span> <span class='p'>+</span> <span class='n'>j</span> <span class='p'>+</span> <span class='m'>1</span><span class='p'>)</span> <span class='p'>+</span> <span class='s'>&quot;\t&quot;</span> <span class='p'>+</span> <span class='p'>(</span><span class='n'>offset</span> <span class='p'>+</span> <span class='m'>1</span> <span class='p'>+</span> <span class='n'>pslg</span><span class='p'>.</span><span class='n'>holes</span><span class='p'>[</span><span class='n'>i</span><span class='p'>].</span><span class='n'>segments</span><span class='p'>[</span><span class='n'>j</span><span class='p'>][</span><span class='m'>0</span><span class='p'>])</span> <span class='p'>+</span> <span class='s'>&quot;\t&quot;</span> <span class='p'>+</span> <span class='p'>(</span><span class='n'>offset</span> <span class='p'>+</span> <span class='m'>1</span> <span class='p'>+</span> <span class='n'>pslg</span><span class='p'>.</span><span class='n'>holes</span><span class='p'>[</span><span class='n'>i</span><span class='p'>].</span><span class='n'>segments</span><span class='p'>[</span><span class='n'>j</span><span class='p'>][</span><span class='m'>1</span><span class='p'>])</span> <span class='p'>+</span> <span class='s'>&quot;  &quot;</span> <span class='p'>+</span> <span class='p'>(</span><span class='n'>boundaryMarker</span> <span class='p'>+</span> <span class='n'>i</span> <span class='p'>+</span> <span class='m'>1</span><span class='p'>));</span>
-                    <span class='p'>}</span>
-                    <span class='n'>offset</span> <span class='p'>+=</span> <span class='n'>j</span><span class='p'>;</span>
-                <span class='p'>}</span>
+                // Line segments
+                sw.WriteLine();
+                sw.WriteLine(&quot;# Line segments.&quot;);
+                sw.WriteLine(pslg.GetNumberOfSegments() + &quot; 1&quot;);
+                sw.WriteLine(&quot;# The polyhedrons.&quot;);
+                boundaryMarker = 2;
+                for (i = 0; i &lt; pslg.segments.Count; i++)
+                {
+                    if (i != 0 &amp;&amp; pslg.boundaryMarkersForPolygons.Contains(i))
+                    {
+                        boundaryMarker++;
+                    }
+                    sw.WriteLine(i + 1 + &quot;\t&quot; + (pslg.segments[i][0] + 1) + &quot;\t&quot; + (pslg.segments[i][1] + 1) + &quot;\t&quot; + boundaryMarker);
+                }
+                offset = i;
+                for (i = 0; i &lt; pslg.holes.Count; i++)
+                {
+                    sw.WriteLine(&quot;# Hole #&quot; + (i + 1));
+                    int j;
+                    for (j = 0; j &lt; pslg.holes[i].segments.Count; j++)
+                    {
+                        sw.WriteLine((offset + j + 1) + &quot;\t&quot; + (offset + 1 + pslg.holes[i].segments[j][0]) + &quot;\t&quot; + (offset + 1 + pslg.holes[i].segments[j][1]) + &quot;  &quot; + (boundaryMarker + i + 1));
+                    }
+                    offset += j;
+                }
 
-                <span class='c1'>// Holes</span>
-                <span class='n'>sw</span><span class='p'>.</span><span class='n'>WriteLine</span><span class='p'>();</span>
-                <span class='n'>sw</span><span class='p'>.</span><span class='n'>WriteLine</span><span class='p'>(</span><span class='s'>&quot;# Holes.&quot;</span><span class='p'>);</span>
-                <span class='n'>sw</span><span class='p'>.</span><span class='n'>WriteLine</span><span class='p'>(</span><span class='n'>pslg</span><span class='p'>.</span><span class='n'>holes</span><span class='p'>.</span><span class='n'>Count</span><span class='p'>);</span>
-                <span class='k'>for</span> <span class='p'>(</span><span class='n'>i</span> <span class='p'>=</span> <span class='m'>0</span><span class='p'>;</span> <span class='n'>i</span> <span class='p'>&lt;</span> <span class='n'>pslg</span><span class='p'>.</span><span class='n'>holes</span><span class='p'>.</span><span class='n'>Count</span><span class='p'>;</span> <span class='n'>i</span><span class='p'>++)</span>
-                <span class='p'>{</span>
-                    <span class='n'>Vector2</span> <span class='n'>point</span> <span class='p'>=</span> <span class='n'>pslg</span><span class='p'>.</span><span class='n'>GetPointInHole</span><span class='p'>(</span><span class='n'>pslg</span><span class='p'>.</span><span class='n'>holes</span><span class='p'>[</span><span class='n'>i</span><span class='p'>]);</span>
-                    <span class='n'>sw</span><span class='p'>.</span><span class='n'>WriteLine</span><span class='p'>((</span><span class='n'>i</span> <span class='p'>+</span> <span class='m'>1</span><span class='p'>)</span> <span class='p'>+</span> <span class='s'>&quot;\t&quot;</span> <span class='p'>+</span> <span class='n'>point</span><span class='p'>.</span><span class='n'>x</span> <span class='p'>+</span> <span class='s'>&quot;\t&quot;</span> <span class='p'>+</span> <span class='n'>point</span><span class='p'>.</span><span class='n'>y</span> <span class='p'>+</span> <span class='s'>&quot;\t # Hole #&quot;</span> <span class='p'>+</span> <span class='p'>(</span><span class='n'>i</span> <span class='p'>+</span> <span class='m'>1</span><span class='p'>));</span>
-                <span class='p'>}</span>
-                <span class='n'>sw</span><span class='p'>.</span><span class='n'>Close</span><span class='p'>();</span>
-            <span class='p'>}</span>
-        <span class='p'>}</span>
-        <span class='k'>catch</span> <span class='p'>(</span><span class='n'>Exception</span> <span class='n'>e</span><span class='p'>)</span>
-        <span class='p'>{</span>
-            <span class='n'>Debug</span><span class='p'>.</span><span class='n'>LogException</span><span class='p'>(</span><span class='n'>e</span><span class='p'>);</span>
-        <span class='p'>}</span>
-    <span class='p'>}</span>
+                // Holes
+                sw.WriteLine();
+                sw.WriteLine(&quot;# Holes.&quot;);
+                sw.WriteLine(pslg.holes.Count);
+                for (i = 0; i &lt; pslg.holes.Count; i++)
+                {
+                    Vector2 point = pslg.GetPointInHole(pslg.holes[i]);
+                    sw.WriteLine((i + 1) + &quot;\t&quot; + point.x + &quot;\t&quot; + point.y + &quot;\t # Hole #&quot; + (i + 1));
+                }
+                sw.Close();
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogException(e);
+        }
+    }
 
-    <span class='k'>void</span> <span class='nf'>ExecuteTriangle</span><span class='p'>()</span>
-    <span class='p'>{</span>
-        <span class='k'>try</span>
-        <span class='p'>{</span>
-            <span class='n'>System</span><span class='p'>.</span><span class='n'>Diagnostics</span><span class='p'>.</span><span class='n'>Process</span> <span class='n'>process</span> <span class='p'>=</span> <span class='k'>new</span> <span class='n'>System</span><span class='p'>.</span><span class='n'>Diagnostics</span><span class='p'>.</span><span class='n'>Process</span><span class='p'>();</span>
-            <span class='n'>process</span><span class='p'>.</span><span class='n'>StartInfo</span><span class='p'>.</span><span class='n'>FileName</span> <span class='p'>=</span> <span class='s'>&quot;C:\\triangle\\triangle.exe&quot;</span><span class='p'>;</span>
-            <span class='n'>process</span><span class='p'>.</span><span class='n'>StartInfo</span><span class='p'>.</span><span class='n'>Arguments</span> <span class='p'>=</span> <span class='s'>&quot;-pPq0 C:\\triangle\\polygon.poly&quot;</span><span class='p'>;</span>
-            <span class='n'>process</span><span class='p'>.</span><span class='n'>StartInfo</span><span class='p'>.</span><span class='n'>RedirectStandardOutput</span> <span class='p'>=</span> <span class='k'>true</span><span class='p'>;</span>
-            <span class='n'>process</span><span class='p'>.</span><span class='n'>StartInfo</span><span class='p'>.</span><span class='n'>UseShellExecute</span> <span class='p'>=</span> <span class='k'>false</span><span class='p'>;</span>
-            <span class='n'>process</span><span class='p'>.</span><span class='n'>StartInfo</span><span class='p'>.</span><span class='n'>CreateNoWindow</span> <span class='p'>=</span> <span class='k'>true</span><span class='p'>;</span>
-            <span class='n'>process</span><span class='p'>.</span><span class='n'>Start</span><span class='p'>();</span>
+    void ExecuteTriangle()
+    {
+        try
+        {
+            System.Diagnostics.Process process = new System.Diagnostics.Process();
+            process.StartInfo.FileName = &quot;C:\\triangle\\triangle.exe&quot;;
+            process.StartInfo.Arguments = &quot;-pPq0 C:\\triangle\\polygon.poly&quot;;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.CreateNoWindow = true;
+            process.Start();
             
-            <span class='c1'>//string output = process.StandardOutput.ReadToEnd();</span>
-            <span class='c1'>//Debug.Log(output);</span>
+            //string output = process.StandardOutput.ReadToEnd();
+            //Debug.Log(output);
             
-            <span class='n'>process</span><span class='p'>.</span><span class='n'>WaitForExit</span><span class='p'>();</span>
-        <span class='p'>}</span>
-        <span class='k'>catch</span> <span class='p'>(</span><span class='n'>System</span><span class='p'>.</span><span class='n'>Exception</span> <span class='n'>e</span><span class='p'>)</span>
-        <span class='p'>{</span>
-            <span class='n'>Debug</span><span class='p'>.</span><span class='n'>LogException</span><span class='p'>(</span><span class='n'>e</span><span class='p'>);</span>
-        <span class='p'>}</span>
-    <span class='p'>}</span>
+            process.WaitForExit();
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogException(e);
+        }
+    }
 
-    <span class='n'>Vector2</span><span class='p'>[]</span> <span class='nf'>ReadVerticesFile</span><span class='p'>()</span>
-    <span class='p'>{</span>
-        <span class='n'>Vector2</span><span class='p'>[]</span> <span class='n'>vertices</span> <span class='p'>=</span> <span class='k'>null</span><span class='p'>;</span>
-        <span class='k'>try</span>
-        <span class='p'>{</span>
-            <span class='kt'>string</span> <span class='n'>outputVerticesFile</span> <span class='p'>=</span> <span class='s'>&quot;C:\\triangle\\polygon.1.node&quot;</span><span class='p'>;</span>
+    Vector2[] ReadVerticesFile()
+    {
+        Vector2[] vertices = null;
+        try
+        {
+            string outputVerticesFile = &quot;C:\\triangle\\polygon.1.node&quot;;
 
-            <span class='n'>StreamReader</span> <span class='n'>sr</span> <span class='p'>=</span> <span class='n'>File</span><span class='p'>.</span><span class='n'>OpenText</span><span class='p'>(</span><span class='n'>outputVerticesFile</span><span class='p'>);</span>
+            StreamReader sr = File.OpenText(outputVerticesFile);
 
-            <span class='kt'>string</span> <span class='n'>line</span> <span class='p'>=</span> <span class='n'>sr</span><span class='p'>.</span><span class='n'>ReadLine</span><span class='p'>();</span>
-            <span class='kt'>int</span> <span class='n'>n</span> <span class='p'>=</span> <span class='n'>line</span><span class='p'>.</span><span class='n'>IndexOf</span><span class='p'>(</span><span class='s'>&quot;  &quot;</span><span class='p'>);</span>
-            <span class='kt'>int</span> <span class='n'>nVerts</span> <span class='p'>=</span> <span class='kt'>int</span><span class='p'>.</span><span class='n'>Parse</span><span class='p'>(</span><span class='n'>line</span><span class='p'>.</span><span class='n'>Substring</span><span class='p'>(</span><span class='m'>0</span><span class='p'>,</span> <span class='n'>n</span><span class='p'>));</span>
-            <span class='n'>vertices</span> <span class='p'>=</span> <span class='k'>new</span> <span class='n'>Vector2</span><span class='p'>[</span><span class='n'>nVerts</span><span class='p'>];</span>
+            string line = sr.ReadLine();
+            int n = line.IndexOf(&quot;  &quot;);
+            int nVerts = int.Parse(line.Substring(0, n));
+            vertices = new Vector2[nVerts];
 
-            <span class='kt'>int</span> <span class='n'>whileCount</span> <span class='p'>=</span> <span class='m'>0</span><span class='p'>;</span>
+            int whileCount = 0;
 
-            <span class='k'>while</span> <span class='p'>((</span><span class='n'>line</span> <span class='p'>=</span> <span class='n'>sr</span><span class='p'>.</span><span class='n'>ReadLine</span><span class='p'>())</span> <span class='p'>!=</span> <span class='k'>null</span><span class='p'>)</span>
-            <span class='p'>{</span>
-                <span class='kt'>int</span> <span class='n'>index</span> <span class='p'>=</span> <span class='p'>-</span><span class='m'>1</span><span class='p'>;</span>
-                <span class='kt'>float</span> <span class='n'>x</span> <span class='p'>=</span> <span class='m'>0f</span><span class='p'>;</span>
-                <span class='kt'>float</span> <span class='n'>y</span> <span class='p'>=</span> <span class='m'>0f</span><span class='p'>;</span>
-                <span class='kt'>int</span> <span class='n'>c</span> <span class='p'>=</span> <span class='m'>0</span><span class='p'>;</span>
-                <span class='k'>if</span> <span class='p'>(!</span><span class='n'>line</span><span class='p'>.</span><span class='n'>Contains</span><span class='p'>(</span><span class='s'>&quot;#&quot;</span><span class='p'>))</span>
-                <span class='p'>{</span>
-                    <span class='kt'>string</span><span class='p'>[]</span> <span class='n'>stringBits</span> <span class='p'>=</span> <span class='n'>line</span><span class='p'>.</span><span class='n'>Split</span><span class='p'>(</span><span class='sc'>&#39; &#39;</span><span class='p'>);</span>
+            while ((line = sr.ReadLine()) != null)
+            {
+                int index = -1;
+                float x = 0f;
+                float y = 0f;
+                int c = 0;
+                if (!line.Contains(&quot;#&quot;))
+                {
+                    string[] stringBits = line.Split(&#39; &#39;);
 
-                    <span class='k'>foreach</span> <span class='p'>(</span><span class='kt'>string</span> <span class='n'>s</span> <span class='k'>in</span> <span class='n'>stringBits</span><span class='p'>)</span>
-                    <span class='p'>{</span>
-                        <span class='k'>if</span> <span class='p'>(</span><span class='n'>s</span> <span class='p'>!=</span> <span class='s'>&quot;&quot;</span> <span class='p'>&amp;&amp;</span> <span class='n'>s</span> <span class='p'>!=</span> <span class='s'>&quot; &quot;</span><span class='p'>)</span>
-                        <span class='p'>{</span>
-                            <span class='k'>if</span> <span class='p'>(</span><span class='n'>c</span> <span class='p'>==</span> <span class='m'>0</span><span class='p'>)</span>
-                                <span class='n'>index</span> <span class='p'>=</span> <span class='kt'>int</span><span class='p'>.</span><span class='n'>Parse</span><span class='p'>(</span><span class='n'>s</span><span class='p'>);</span>
-                            <span class='k'>else</span> <span class='nf'>if</span> <span class='p'>(</span><span class='n'>c</span> <span class='p'>==</span> <span class='m'>1</span><span class='p'>)</span>
-                                <span class='n'>x</span> <span class='p'>=</span> <span class='kt'>float</span><span class='p'>.</span><span class='n'>Parse</span><span class='p'>(</span><span class='n'>s</span><span class='p'>);</span>
-                            <span class='k'>else</span> <span class='nf'>if</span> <span class='p'>(</span><span class='n'>c</span> <span class='p'>==</span> <span class='m'>2</span><span class='p'>)</span>
-                                <span class='n'>y</span> <span class='p'>=</span> <span class='kt'>float</span><span class='p'>.</span><span class='n'>Parse</span><span class='p'>(</span><span class='n'>s</span><span class='p'>);</span>
+                    foreach (string s in stringBits)
+                    {
+                        if (s != &quot;&quot; &amp;&amp; s != &quot; &quot;)
+                        {
+                            if (c == 0)
+                                index = int.Parse(s);
+                            else if (c == 1)
+                                x = float.Parse(s);
+                            else if (c == 2)
+                                y = float.Parse(s);
 
-                            <span class='n'>c</span><span class='p'>++;</span>
-                        <span class='p'>}</span>
-                    <span class='p'>}</span>
-                <span class='p'>}</span>
+                            c++;
+                        }
+                    }
+                }
 
-                <span class='k'>if</span> <span class='p'>(</span><span class='n'>index</span> <span class='p'>!=</span> <span class='p'>-</span><span class='m'>1</span><span class='p'>)</span>
-                <span class='p'>{</span>
-                    <span class='n'>vertices</span><span class='p'>[</span><span class='n'>index</span> <span class='p'>-</span> <span class='m'>1</span><span class='p'>]</span> <span class='p'>=</span> <span class='k'>new</span> <span class='n'>Vector2</span><span class='p'>(</span><span class='n'>x</span><span class='p'>,</span> <span class='n'>y</span><span class='p'>);</span>
-                <span class='p'>}</span>
+                if (index != -1)
+                {
+                    vertices[index - 1] = new Vector2(x, y);
+                }
 
 
-                <span class='n'>whileCount</span><span class='p'>++;</span>
-                <span class='k'>if</span> <span class='p'>(</span><span class='n'>whileCount</span> <span class='p'>&gt;</span> <span class='m'>1000</span><span class='p'>)</span>
-                <span class='p'>{</span>
-                    <span class='n'>Debug</span><span class='p'>.</span><span class='n'>LogError</span><span class='p'>(</span><span class='s'>&quot;Stuck in while loop&quot;</span><span class='p'>);</span>
-                    <span class='k'>break</span><span class='p'>;</span>
-                <span class='p'>}</span>
-            <span class='p'>}</span>
+                whileCount++;
+                if (whileCount &gt; 1000)
+                {
+                    Debug.LogError(&quot;Stuck in while loop&quot;);
+                    break;
+                }
+            }
 
-            <span class='n'>sr</span><span class='p'>.</span><span class='n'>Close</span><span class='p'>();</span>
-        <span class='p'>}</span>
-        <span class='k'>catch</span> <span class='p'>(</span><span class='n'>Exception</span> <span class='n'>e</span><span class='p'>)</span>
-        <span class='p'>{</span>
-            <span class='n'>Debug</span><span class='p'>.</span><span class='n'>LogException</span><span class='p'>(</span><span class='n'>e</span><span class='p'>);</span>
-        <span class='p'>}</span>
+            sr.Close();
+        }
+        catch (Exception e)
+        {
+            Debug.LogException(e);
+        }
 
-        <span class='k'>return</span> <span class='n'>vertices</span><span class='p'>;</span>
-    <span class='p'>}</span>
+        return vertices;
+    }
 
-    <span class='k'>private</span> <span class='kt'>int</span><span class='p'>[]</span> <span class='nf'>ReadTrianglesFile</span><span class='p'>()</span>
-    <span class='p'>{</span>
-        <span class='n'>List</span><span class='p'>&lt;</span><span class='kt'>int</span><span class='p'>&gt;</span> <span class='n'>triList</span> <span class='p'>=</span> <span class='k'>null</span><span class='p'>;</span>
-        <span class='k'>try</span>
-        <span class='p'>{</span>
-            <span class='kt'>string</span> <span class='n'>outputTrianglesFile</span> <span class='p'>=</span> <span class='s'>&quot;C:\\triangle\\polygon.1.ele&quot;</span><span class='p'>;</span>
+    private int[] ReadTrianglesFile()
+    {
+        List&lt;int&gt; triList = null;
+        try
+        {
+            string outputTrianglesFile = &quot;C:\\triangle\\polygon.1.ele&quot;;
 
-            <span class='k'>using</span> <span class='p'>(</span><span class='n'>StreamReader</span> <span class='n'>sr</span> <span class='p'>=</span> <span class='n'>File</span><span class='p'>.</span><span class='n'>OpenText</span><span class='p'>(</span><span class='n'>outputTrianglesFile</span><span class='p'>))</span>
-            <span class='p'>{</span>
+            using (StreamReader sr = File.OpenText(outputTrianglesFile))
+            {
 
-                <span class='kt'>string</span> <span class='n'>line</span> <span class='p'>=</span> <span class='n'>sr</span><span class='p'>.</span><span class='n'>ReadLine</span><span class='p'>();</span>
-                <span class='kt'>int</span> <span class='n'>n</span> <span class='p'>=</span> <span class='n'>line</span><span class='p'>.</span><span class='n'>IndexOf</span><span class='p'>(</span><span class='s'>&quot;  &quot;</span><span class='p'>);</span>
-                <span class='kt'>int</span> <span class='n'>nTriangles</span> <span class='p'>=</span> <span class='kt'>int</span><span class='p'>.</span><span class='n'>Parse</span><span class='p'>(</span><span class='n'>line</span><span class='p'>.</span><span class='n'>Substring</span><span class='p'>(</span><span class='m'>0</span><span class='p'>,</span> <span class='n'>n</span><span class='p'>));</span>
-                <span class='c1'>//int[] triangles = new int[nTriangles * 3];</span>
-                <span class='n'>triList</span> <span class='p'>=</span> <span class='k'>new</span> <span class='n'>List</span><span class='p'>&lt;</span><span class='kt'>int</span><span class='p'>&gt;(</span><span class='n'>nTriangles</span> <span class='p'>*</span> <span class='m'>3</span><span class='p'>);</span>
+                string line = sr.ReadLine();
+                int n = line.IndexOf(&quot;  &quot;);
+                int nTriangles = int.Parse(line.Substring(0, n));
+                //int[] triangles = new int[nTriangles * 3];
+                triList = new List&lt;int&gt;(nTriangles * 3);
 
-                <span class='kt'>int</span> <span class='n'>count</span> <span class='p'>=</span> <span class='m'>0</span><span class='p'>;</span>
+                int count = 0;
 
-                <span class='k'>while</span> <span class='p'>((</span><span class='n'>line</span> <span class='p'>=</span> <span class='n'>sr</span><span class='p'>.</span><span class='n'>ReadLine</span><span class='p'>())</span> <span class='p'>!=</span> <span class='k'>null</span><span class='p'>)</span>
-                <span class='p'>{</span>
-                    <span class='kt'>int</span> <span class='n'>index</span> <span class='p'>=</span> <span class='p'>-</span><span class='m'>1</span><span class='p'>;</span>
-                    <span class='kt'>int</span> <span class='n'>c</span> <span class='p'>=</span> <span class='m'>0</span><span class='p'>;</span>
-                    <span class='kt'>int</span><span class='p'>[]</span> <span class='n'>tri</span> <span class='p'>=</span> <span class='k'>new</span> <span class='kt'>int</span><span class='p'>[</span><span class='m'>3</span><span class='p'>];</span>
-                    <span class='k'>if</span> <span class='p'>(!</span><span class='n'>line</span><span class='p'>.</span><span class='n'>Contains</span><span class='p'>(</span><span class='s'>&quot;#&quot;</span><span class='p'>))</span>
-                    <span class='p'>{</span>
-                        <span class='kt'>string</span><span class='p'>[]</span> <span class='n'>stringBits</span> <span class='p'>=</span> <span class='n'>line</span><span class='p'>.</span><span class='n'>Split</span><span class='p'>(</span><span class='sc'>&#39; &#39;</span><span class='p'>);</span>
+                while ((line = sr.ReadLine()) != null)
+                {
+                    int index = -1;
+                    int c = 0;
+                    int[] tri = new int[3];
+                    if (!line.Contains(&quot;#&quot;))
+                    {
+                        string[] stringBits = line.Split(&#39; &#39;);
 
-                        <span class='k'>foreach</span> <span class='p'>(</span><span class='kt'>string</span> <span class='n'>s</span> <span class='k'>in</span> <span class='n'>stringBits</span><span class='p'>)</span>
-                        <span class='p'>{</span>
-                            <span class='k'>if</span> <span class='p'>(</span><span class='n'>s</span> <span class='p'>!=</span> <span class='s'>&quot;&quot;</span> <span class='p'>&amp;&amp;</span> <span class='n'>s</span> <span class='p'>!=</span> <span class='s'>&quot; &quot;</span><span class='p'>)</span>
-                            <span class='p'>{</span>
-                                <span class='k'>if</span> <span class='p'>(</span><span class='n'>c</span> <span class='p'>==</span> <span class='m'>0</span><span class='p'>)</span>
-                                    <span class='n'>index</span> <span class='p'>=</span> <span class='kt'>int</span><span class='p'>.</span><span class='n'>Parse</span><span class='p'>(</span><span class='n'>s</span><span class='p'>);</span>
-                                <span class='k'>else</span> <span class='nf'>if</span> <span class='p'>(</span><span class='n'>c</span> <span class='p'>==</span> <span class='m'>1</span><span class='p'>)</span>
-                                    <span class='n'>tri</span><span class='p'>[</span><span class='m'>0</span><span class='p'>]</span> <span class='p'>=</span> <span class='kt'>int</span><span class='p'>.</span><span class='n'>Parse</span><span class='p'>(</span><span class='n'>s</span><span class='p'>)</span> <span class='p'>-</span> <span class='m'>1</span><span class='p'>;</span>
-                                <span class='k'>else</span> <span class='nf'>if</span> <span class='p'>(</span><span class='n'>c</span> <span class='p'>==</span> <span class='m'>2</span><span class='p'>)</span>
-                                    <span class='n'>tri</span><span class='p'>[</span><span class='m'>1</span><span class='p'>]</span> <span class='p'>=</span> <span class='kt'>int</span><span class='p'>.</span><span class='n'>Parse</span><span class='p'>(</span><span class='n'>s</span><span class='p'>)</span> <span class='p'>-</span> <span class='m'>1</span><span class='p'>;</span>
-                                <span class='k'>else</span> <span class='nf'>if</span> <span class='p'>(</span><span class='n'>c</span> <span class='p'>==</span> <span class='m'>3</span><span class='p'>)</span>
-                                    <span class='n'>tri</span><span class='p'>[</span><span class='m'>2</span><span class='p'>]</span> <span class='p'>=</span> <span class='kt'>int</span><span class='p'>.</span><span class='n'>Parse</span><span class='p'>(</span><span class='n'>s</span><span class='p'>)</span> <span class='p'>-</span> <span class='m'>1</span><span class='p'>;</span>
+                        foreach (string s in stringBits)
+                        {
+                            if (s != &quot;&quot; &amp;&amp; s != &quot; &quot;)
+                            {
+                                if (c == 0)
+                                    index = int.Parse(s);
+                                else if (c == 1)
+                                    tri[0] = int.Parse(s) - 1;
+                                else if (c == 2)
+                                    tri[1] = int.Parse(s) - 1;
+                                else if (c == 3)
+                                    tri[2] = int.Parse(s) - 1;
 
-                                <span class='n'>c</span><span class='p'>++;</span>
-                            <span class='p'>}</span>
-                        <span class='p'>}</span>
-                    <span class='p'>}</span>
+                                c++;
+                            }
+                        }
+                    }
 
-                    <span class='k'>if</span> <span class='p'>(</span><span class='n'>index</span> <span class='p'>!=</span> <span class='p'>-</span><span class='m'>1</span><span class='p'>)</span>
-                    <span class='p'>{</span>
-                        <span class='n'>triList</span><span class='p'>.</span><span class='n'>AddRange</span><span class='p'>(</span><span class='n'>tri</span><span class='p'>);</span>
-                    <span class='p'>}</span>
+                    if (index != -1)
+                    {
+                        triList.AddRange(tri);
+                    }
 
-                    <span class='n'>count</span><span class='p'>++;</span>
-                    <span class='k'>if</span> <span class='p'>(</span><span class='n'>count</span> <span class='p'>&gt;</span> <span class='m'>1000</span><span class='p'>)</span>
-                    <span class='p'>{</span>
-                        <span class='n'>Debug</span><span class='p'>.</span><span class='n'>LogError</span><span class='p'>(</span><span class='s'>&quot;Stuck in while loop&quot;</span><span class='p'>);</span>
-                        <span class='k'>break</span><span class='p'>;</span>
-                    <span class='p'>}</span>
-                <span class='p'>}</span>
+                    count++;
+                    if (count &gt; 1000)
+                    {
+                        Debug.LogError(&quot;Stuck in while loop&quot;);
+                        break;
+                    }
+                }
 
-                <span class='n'>sr</span><span class='p'>.</span><span class='n'>Close</span><span class='p'>();</span>
-            <span class='p'>}</span>
-        <span class='p'>}</span>
-        <span class='k'>catch</span> <span class='p'>(</span><span class='n'>Exception</span> <span class='n'>e</span><span class='p'>)</span>
-        <span class='p'>{</span>
-            <span class='n'>Debug</span><span class='p'>.</span><span class='n'>LogException</span><span class='p'>(</span><span class='n'>e</span><span class='p'>);</span>
-        <span class='p'>}</span>
+                sr.Close();
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogException(e);
+        }
 
-        <span class='k'>return</span> <span class='n'>triList</span><span class='p'>.</span><span class='n'>ToArray</span><span class='p'>();</span>
-    <span class='p'>}</span>
+        return triList.ToArray();
+    }
 
-    <span class='k'>private</span> <span class='k'>void</span> <span class='nf'>CleanUp</span><span class='p'>()</span>
-    <span class='p'>{</span>
-        <span class='k'>try</span>
-        <span class='p'>{</span>
-            <span class='n'>File</span><span class='p'>.</span><span class='n'>Delete</span><span class='p'>(</span><span class='s'>&quot;C:\\triangle\\polygon.1.ele&quot;</span><span class='p'>);</span>
-            <span class='n'>File</span><span class='p'>.</span><span class='n'>Delete</span><span class='p'>(</span><span class='s'>&quot;C:\\triangle\\polygon.1.node&quot;</span><span class='p'>);</span>
-            <span class='n'>File</span><span class='p'>.</span><span class='n'>Delete</span><span class='p'>(</span><span class='s'>&quot;C:\\triangle\\polygon.poly&quot;</span><span class='p'>);</span>
-        <span class='p'>}</span>
-        <span class='k'>catch</span> <span class='p'>(</span><span class='n'>Exception</span> <span class='n'>e</span><span class='p'>)</span>
-        <span class='p'>{</span>
-            <span class='n'>Debug</span><span class='p'>.</span><span class='n'>LogException</span><span class='p'>(</span><span class='n'>e</span><span class='p'>);</span>
-        <span class='p'>}</span>
-    <span class='p'>}</span>
-<span class='p'>}</span>
-</code></pre></div><h2>PSLG.cs</h2><div class='highlight'><pre><code class='c#'><span class='k'>using</span> <span class='nn'>UnityEngine</span><span class='p'>;</span>
-<span class='k'>using</span> <span class='nn'>System.Collections</span><span class='p'>;</span>
-<span class='k'>using</span> <span class='nn'>System.Collections.Generic</span><span class='p'>;</span>
+    private void CleanUp()
+    {
+        try
+        {
+            File.Delete(&quot;C:\\triangle\\polygon.1.ele&quot;);
+            File.Delete(&quot;C:\\triangle\\polygon.1.node&quot;);
+            File.Delete(&quot;C:\\triangle\\polygon.poly&quot;);
+        }
+        catch (Exception e)
+        {
+            Debug.LogException(e);
+        }
+    }
+}</code></pre>
+  </div><h2>PSLG.cs</h2><div>
+    <pre><code class='c#'>using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
-<span class='k'>public</span> <span class='k'>class</span> <span class='nc'>PSLG</span> <span class='p'>{</span>
-    <span class='k'>public</span> <span class='n'>List</span><span class='p'>&lt;</span><span class='n'>Vector2</span><span class='p'>&gt;</span> <span class='n'>vertices</span><span class='p'>;</span>
-    <span class='k'>public</span> <span class='n'>List</span><span class='p'>&lt;</span><span class='kt'>int</span><span class='p'>[]&gt;</span> <span class='n'>segments</span><span class='p'>;</span>
-    <span class='k'>public</span> <span class='n'>List</span><span class='p'>&lt;</span><span class='n'>PSLG</span><span class='p'>&gt;</span> <span class='n'>holes</span><span class='p'>;</span>
-    <span class='k'>public</span> <span class='n'>List</span><span class='p'>&lt;</span><span class='kt'>int</span><span class='p'>&gt;</span> <span class='n'>boundaryMarkersForPolygons</span><span class='p'>;</span>
+public class PSLG {
+    public List&lt;Vector2&gt; vertices;
+    public List&lt;int[]&gt; segments;
+    public List&lt;PSLG&gt; holes;
+    public List&lt;int&gt; boundaryMarkersForPolygons;
     
-    <span class='k'>public</span> <span class='nf'>PSLG</span><span class='p'>()</span>
-    <span class='p'>{</span>
-        <span class='n'>vertices</span> <span class='p'>=</span> <span class='k'>new</span> <span class='n'>List</span><span class='p'>&lt;</span><span class='n'>Vector2</span><span class='p'>&gt;();</span>
-        <span class='n'>segments</span> <span class='p'>=</span> <span class='k'>new</span> <span class='n'>List</span><span class='p'>&lt;</span><span class='kt'>int</span><span class='p'>[]&gt;();</span>
-        <span class='n'>holes</span> <span class='p'>=</span> <span class='k'>new</span> <span class='n'>List</span><span class='p'>&lt;</span><span class='n'>PSLG</span><span class='p'>&gt;();</span>
-        <span class='n'>boundaryMarkersForPolygons</span> <span class='p'>=</span> <span class='k'>new</span> <span class='n'>List</span><span class='p'>&lt;</span><span class='kt'>int</span><span class='p'>&gt;();</span>
-    <span class='p'>}</span>
+    public PSLG()
+    {
+        vertices = new List&lt;Vector2&gt;();
+        segments = new List&lt;int[]&gt;();
+        holes = new List&lt;PSLG&gt;();
+        boundaryMarkersForPolygons = new List&lt;int&gt;();
+    }
 
-    <span class='k'>public</span> <span class='nf'>PSLG</span><span class='p'>(</span><span class='n'>List</span><span class='p'>&lt;</span><span class='n'>Vector2</span><span class='p'>&gt;</span> <span class='n'>vertices</span><span class='p'>)</span> <span class='p'>:</span> <span class='k'>this</span><span class='p'>()</span>
-    <span class='p'>{</span>
-        <span class='k'>this</span><span class='p'>.</span><span class='n'>AddVertexLoop</span><span class='p'>(</span><span class='n'>vertices</span><span class='p'>);</span>
-    <span class='p'>}</span>
+    public PSLG(List&lt;Vector2&gt; vertices) : this()
+    {
+        this.AddVertexLoop(vertices);
+    }
     
-    <span class='k'>public</span> <span class='k'>void</span> <span class='nf'>AddVertexLoop</span><span class='p'>(</span><span class='n'>List</span><span class='p'>&lt;</span><span class='n'>Vector2</span><span class='p'>&gt;</span> <span class='n'>vertices</span><span class='p'>)</span>
-    <span class='p'>{</span>
-        <span class='k'>if</span> <span class='p'>(</span><span class='n'>vertices</span><span class='p'>.</span><span class='n'>Count</span> <span class='p'>&lt;</span> <span class='m'>3</span><span class='p'>)</span>
-        <span class='p'>{</span>
-            <span class='n'>Debug</span><span class='p'>.</span><span class='n'>Log</span><span class='p'>(</span><span class='s'>&quot;A vertex loop cannot have less than three vertices &quot;</span> <span class='p'>+</span> <span class='n'>vertices</span><span class='p'>.</span><span class='n'>Count</span><span class='p'>);</span>
-        <span class='p'>}</span>
-        <span class='k'>else</span>
-        <span class='p'>{</span>
-            <span class='k'>this</span><span class='p'>.</span><span class='n'>vertices</span><span class='p'>.</span><span class='n'>AddRange</span><span class='p'>(</span><span class='n'>vertices</span><span class='p'>);</span>
-            <span class='kt'>int</span> <span class='n'>segmentOffset</span> <span class='p'>=</span> <span class='n'>segments</span><span class='p'>.</span><span class='n'>Count</span><span class='p'>;</span>
-            <span class='n'>boundaryMarkersForPolygons</span><span class='p'>.</span><span class='n'>Add</span><span class='p'>(</span><span class='n'>segments</span><span class='p'>.</span><span class='n'>Count</span><span class='p'>);</span>
-            <span class='k'>for</span><span class='p'>(</span><span class='kt'>int</span> <span class='n'>i</span> <span class='p'>=</span> <span class='m'>0</span><span class='p'>;</span> <span class='n'>i</span> <span class='p'>&lt;</span> <span class='n'>vertices</span><span class='p'>.</span><span class='n'>Count</span> <span class='p'>-</span> <span class='m'>1</span><span class='p'>;</span> <span class='n'>i</span><span class='p'>++)</span>
-            <span class='p'>{</span>
-                <span class='n'>segments</span><span class='p'>.</span><span class='n'>Add</span><span class='p'>(</span><span class='k'>new</span> <span class='kt'>int</span><span class='p'>[]</span> <span class='p'>{</span> <span class='n'>i</span> <span class='p'>+</span> <span class='n'>segmentOffset</span><span class='p'>,</span> <span class='n'>i</span> <span class='p'>+</span> <span class='m'>1</span> <span class='p'>+</span> <span class='n'>segmentOffset</span> <span class='p'>});</span>
-            <span class='p'>}</span>
-            <span class='n'>segments</span><span class='p'>.</span><span class='n'>Add</span><span class='p'>(</span><span class='k'>new</span> <span class='kt'>int</span><span class='p'>[]</span> <span class='p'>{</span> <span class='n'>vertices</span><span class='p'>.</span><span class='n'>Count</span> <span class='p'>-</span> <span class='m'>1</span> <span class='p'>+</span> <span class='n'>segmentOffset</span><span class='p'>,</span> <span class='n'>segmentOffset</span> <span class='p'>});</span>
-        <span class='p'>}</span>
-    <span class='p'>}</span>
+    public void AddVertexLoop(List&lt;Vector2&gt; vertices)
+    {
+        if (vertices.Count &lt; 3)
+        {
+            Debug.Log(&quot;A vertex loop cannot have less than three vertices &quot; + vertices.Count);
+        }
+        else
+        {
+            this.vertices.AddRange(vertices);
+            int segmentOffset = segments.Count;
+            boundaryMarkersForPolygons.Add(segments.Count);
+            for(int i = 0; i &lt; vertices.Count - 1; i++)
+            {
+                segments.Add(new int[] { i + segmentOffset, i + 1 + segmentOffset });
+            }
+            segments.Add(new int[] { vertices.Count - 1 + segmentOffset, segmentOffset });
+        }
+    }
 
-    <span class='k'>public</span> <span class='k'>void</span> <span class='nf'>AddOrderedVertices</span><span class='p'>(</span><span class='n'>Vector2</span><span class='p'>[]</span> <span class='n'>vertices</span><span class='p'>)</span>
-    <span class='p'>{</span>
-        <span class='n'>AddVertexLoop</span><span class='p'>(</span><span class='k'>new</span> <span class='n'>List</span><span class='p'>&lt;</span><span class='n'>Vector2</span><span class='p'>&gt;(</span><span class='n'>vertices</span><span class='p'>));</span>
-    <span class='p'>}</span>
+    public void AddOrderedVertices(Vector2[] vertices)
+    {
+        AddVertexLoop(new List&lt;Vector2&gt;(vertices));
+    }
 
-    <span class='k'>public</span> <span class='k'>void</span> <span class='nf'>AddHole</span><span class='p'>(</span><span class='n'>List</span><span class='p'>&lt;</span><span class='n'>Vector2</span><span class='p'>&gt;</span> <span class='n'>vertices</span><span class='p'>)</span>
-    <span class='p'>{</span>
-        <span class='n'>PSLG</span> <span class='n'>hole</span> <span class='p'>=</span> <span class='k'>new</span> <span class='n'>PSLG</span><span class='p'>();</span>
-        <span class='n'>hole</span><span class='p'>.</span><span class='n'>AddVertexLoop</span><span class='p'>(</span><span class='n'>vertices</span><span class='p'>);</span>
-        <span class='n'>holes</span><span class='p'>.</span><span class='n'>Add</span><span class='p'>(</span><span class='n'>hole</span><span class='p'>);</span>
-    <span class='p'>}</span>
+    public void AddHole(List&lt;Vector2&gt; vertices)
+    {
+        PSLG hole = new PSLG();
+        hole.AddVertexLoop(vertices);
+        holes.Add(hole);
+    }
 
-    <span class='k'>public</span> <span class='k'>void</span> <span class='nf'>AddHole</span><span class='p'>(</span><span class='n'>Vector2</span><span class='p'>[]</span> <span class='n'>vertices</span><span class='p'>)</span>
-    <span class='p'>{</span>
-        <span class='n'>AddHole</span><span class='p'>(</span><span class='k'>new</span> <span class='n'>List</span><span class='p'>&lt;</span><span class='n'>Vector2</span><span class='p'>&gt;(</span><span class='n'>vertices</span><span class='p'>));</span>
-    <span class='p'>}</span>
+    public void AddHole(Vector2[] vertices)
+    {
+        AddHole(new List&lt;Vector2&gt;(vertices));
+    }
 
-    <span class='k'>public</span> <span class='kt'>int</span> <span class='nf'>GetNumberOfSegments</span><span class='p'>()</span>
-    <span class='p'>{</span>
-        <span class='kt'>int</span> <span class='n'>offset</span> <span class='p'>=</span> <span class='n'>vertices</span><span class='p'>.</span><span class='n'>Count</span><span class='p'>;</span>
-        <span class='k'>foreach</span> <span class='p'>(</span><span class='n'>PSLG</span> <span class='n'>hole</span> <span class='k'>in</span> <span class='n'>holes</span><span class='p'>)</span>
-        <span class='p'>{</span>
-            <span class='n'>offset</span> <span class='p'>+=</span> <span class='n'>hole</span><span class='p'>.</span><span class='n'>segments</span><span class='p'>.</span><span class='n'>Count</span><span class='p'>;</span>
-        <span class='p'>}</span>
+    public int GetNumberOfSegments()
+    {
+        int offset = vertices.Count;
+        foreach (PSLG hole in holes)
+        {
+            offset += hole.segments.Count;
+        }
 
-        <span class='k'>return</span> <span class='n'>offset</span><span class='p'>;</span>
-    <span class='p'>}</span>
+        return offset;
+    }
 
-    <span class='k'>public</span> <span class='kt'>bool</span> <span class='nf'>IsPointInPolygon</span><span class='p'>(</span><span class='n'>Vector2</span> <span class='n'>point</span><span class='p'>)</span>
-    <span class='p'>{</span>
-        <span class='kt'>int</span> <span class='n'>j</span> <span class='p'>=</span> <span class='n'>segments</span><span class='p'>.</span><span class='n'>Count</span> <span class='p'>-</span> <span class='m'>1</span><span class='p'>;</span>
-        <span class='kt'>bool</span> <span class='n'>oddNodes</span> <span class='p'>=</span> <span class='k'>false</span><span class='p'>;</span>
+    public bool IsPointInPolygon(Vector2 point)
+    {
+        int j = segments.Count - 1;
+        bool oddNodes = false;
 
-        <span class='k'>for</span> <span class='p'>(</span><span class='kt'>int</span> <span class='n'>i</span> <span class='p'>=</span> <span class='m'>0</span><span class='p'>;</span> <span class='n'>i</span> <span class='p'>&lt;</span> <span class='n'>segments</span><span class='p'>.</span><span class='n'>Count</span><span class='p'>;</span> <span class='n'>i</span><span class='p'>++)</span>
-        <span class='p'>{</span>
-            <span class='k'>if</span> <span class='p'>((</span><span class='n'>vertices</span><span class='p'>[</span><span class='n'>i</span><span class='p'>].</span><span class='n'>y</span> <span class='p'>&lt;</span> <span class='n'>point</span><span class='p'>.</span><span class='n'>y</span> <span class='p'>&amp;&amp;</span> <span class='n'>vertices</span><span class='p'>[</span><span class='n'>j</span><span class='p'>].</span><span class='n'>y</span> <span class='p'>&gt;=</span> <span class='n'>point</span><span class='p'>.</span><span class='n'>y</span>
-            <span class='p'>||</span> <span class='n'>vertices</span><span class='p'>[</span><span class='n'>j</span><span class='p'>].</span><span class='n'>y</span> <span class='p'>&lt;</span> <span class='n'>point</span><span class='p'>.</span><span class='n'>y</span> <span class='p'>&amp;&amp;</span> <span class='n'>vertices</span><span class='p'>[</span><span class='n'>i</span><span class='p'>].</span><span class='n'>y</span> <span class='p'>&gt;=</span> <span class='n'>point</span><span class='p'>.</span><span class='n'>y</span><span class='p'>)</span>
-            <span class='p'>&amp;&amp;</span> <span class='p'>(</span><span class='n'>vertices</span><span class='p'>[</span><span class='n'>i</span><span class='p'>].</span><span class='n'>x</span> <span class='p'>&lt;=</span> <span class='n'>point</span><span class='p'>.</span><span class='n'>x</span> <span class='p'>||</span> <span class='n'>vertices</span><span class='p'>[</span><span class='n'>j</span><span class='p'>].</span><span class='n'>x</span> <span class='p'>&lt;=</span> <span class='n'>point</span><span class='p'>.</span><span class='n'>x</span><span class='p'>))</span>
-            <span class='p'>{</span>
-                <span class='n'>oddNodes</span> <span class='p'>^=</span> <span class='p'>(</span><span class='n'>vertices</span><span class='p'>[</span><span class='n'>i</span><span class='p'>].</span><span class='n'>x</span> <span class='p'>+</span> <span class='p'>(</span><span class='n'>point</span><span class='p'>.</span><span class='n'>y</span> <span class='p'>-</span> <span class='n'>vertices</span><span class='p'>[</span><span class='n'>i</span><span class='p'>].</span><span class='n'>y</span><span class='p'>)</span> <span class='p'>/</span> <span class='p'>(</span><span class='n'>vertices</span><span class='p'>[</span><span class='n'>j</span><span class='p'>].</span><span class='n'>y</span> <span class='p'>-</span> <span class='n'>vertices</span><span class='p'>[</span><span class='n'>i</span><span class='p'>].</span><span class='n'>y</span><span class='p'>)</span> <span class='p'>*</span> <span class='p'>(</span><span class='n'>vertices</span><span class='p'>[</span><span class='n'>j</span><span class='p'>].</span><span class='n'>x</span> <span class='p'>-</span> <span class='n'>vertices</span><span class='p'>[</span><span class='n'>i</span><span class='p'>].</span><span class='n'>x</span><span class='p'>)</span> <span class='p'>&lt;</span> <span class='n'>point</span><span class='p'>.</span><span class='n'>x</span><span class='p'>);</span>
-            <span class='p'>}</span>
-            <span class='n'>j</span> <span class='p'>=</span> <span class='n'>i</span><span class='p'>;</span>
-        <span class='p'>}</span>
+        for (int i = 0; i &lt; segments.Count; i++)
+        {
+            if ((vertices[i].y &lt; point.y &amp;&amp; vertices[j].y &gt;= point.y
+            || vertices[j].y &lt; point.y &amp;&amp; vertices[i].y &gt;= point.y)
+            &amp;&amp; (vertices[i].x &lt;= point.x || vertices[j].x &lt;= point.x))
+            {
+                oddNodes ^= (vertices[i].x + (point.y - vertices[i].y) / (vertices[j].y - vertices[i].y) * (vertices[j].x - vertices[i].x) &lt; point.x);
+            }
+            j = i;
+        }
 
-        <span class='k'>return</span> <span class='n'>oddNodes</span><span class='p'>;</span>
-    <span class='p'>}</span>
+        return oddNodes;
+    }
 
-    <span class='k'>public</span> <span class='n'>Vector2</span> <span class='nf'>GetPointInPolygon</span><span class='p'>()</span>
-    <span class='p'>{</span>
-        <span class='kt'>float</span> <span class='n'>topMost</span> <span class='p'>=</span> <span class='n'>vertices</span><span class='p'>[</span><span class='m'>0</span><span class='p'>].</span><span class='n'>y</span><span class='p'>;</span>
-        <span class='kt'>float</span> <span class='n'>bottomMost</span> <span class='p'>=</span> <span class='n'>vertices</span><span class='p'>[</span><span class='m'>0</span><span class='p'>].</span><span class='n'>y</span><span class='p'>;</span>
-        <span class='kt'>float</span> <span class='n'>leftMost</span> <span class='p'>=</span> <span class='n'>vertices</span><span class='p'>[</span><span class='m'>0</span><span class='p'>].</span><span class='n'>x</span><span class='p'>;</span>
-        <span class='kt'>float</span> <span class='n'>rightMost</span> <span class='p'>=</span> <span class='n'>vertices</span><span class='p'>[</span><span class='m'>0</span><span class='p'>].</span><span class='n'>x</span><span class='p'>;</span>
+    public Vector2 GetPointInPolygon()
+    {
+        float topMost = vertices[0].y;
+        float bottomMost = vertices[0].y;
+        float leftMost = vertices[0].x;
+        float rightMost = vertices[0].x;
 
-        <span class='k'>foreach</span> <span class='p'>(</span><span class='n'>Vector2</span> <span class='n'>vertex</span> <span class='k'>in</span> <span class='n'>vertices</span><span class='p'>)</span>
-        <span class='p'>{</span>
-            <span class='k'>if</span> <span class='p'>(</span><span class='n'>vertex</span><span class='p'>.</span><span class='n'>y</span> <span class='p'>&gt;</span> <span class='n'>topMost</span><span class='p'>)</span>
-                <span class='n'>topMost</span> <span class='p'>=</span> <span class='n'>vertex</span><span class='p'>.</span><span class='n'>y</span><span class='p'>;</span>
-            <span class='k'>if</span> <span class='p'>(</span><span class='n'>vertex</span><span class='p'>.</span><span class='n'>y</span> <span class='p'>&lt;</span> <span class='n'>bottomMost</span><span class='p'>)</span>
-                <span class='n'>bottomMost</span> <span class='p'>=</span> <span class='n'>vertex</span><span class='p'>.</span><span class='n'>y</span><span class='p'>;</span>
-            <span class='k'>if</span> <span class='p'>(</span><span class='n'>vertex</span><span class='p'>.</span><span class='n'>x</span> <span class='p'>&lt;</span> <span class='n'>leftMost</span><span class='p'>)</span>
-                <span class='n'>leftMost</span> <span class='p'>=</span> <span class='n'>vertex</span><span class='p'>.</span><span class='n'>x</span><span class='p'>;</span>
-            <span class='k'>if</span> <span class='p'>(</span><span class='n'>vertex</span><span class='p'>.</span><span class='n'>x</span> <span class='p'>&gt;</span> <span class='n'>rightMost</span><span class='p'>)</span>
-                <span class='n'>leftMost</span> <span class='p'>=</span> <span class='n'>vertex</span><span class='p'>.</span><span class='n'>x</span><span class='p'>;</span>
-        <span class='p'>}</span>
+        foreach (Vector2 vertex in vertices)
+        {
+            if (vertex.y &gt; topMost)
+                topMost = vertex.y;
+            if (vertex.y &lt; bottomMost)
+                bottomMost = vertex.y;
+            if (vertex.x &lt; leftMost)
+                leftMost = vertex.x;
+            if (vertex.x &gt; rightMost)
+                leftMost = vertex.x;
+        }
         
-        <span class='n'>Vector2</span> <span class='n'>point</span><span class='p'>;</span>
+        Vector2 point;
         
-        <span class='kt'>int</span> <span class='n'>whileCount</span> <span class='p'>=</span> <span class='m'>0</span><span class='p'>;</span>
-        <span class='k'>do</span>
-        <span class='p'>{</span>
-            <span class='n'>point</span> <span class='p'>=</span> <span class='k'>new</span> <span class='n'>Vector2</span><span class='p'>(</span><span class='n'>Random</span><span class='p'>.</span><span class='n'>Range</span><span class='p'>(</span><span class='n'>leftMost</span><span class='p'>,</span> <span class='n'>rightMost</span><span class='p'>),</span> <span class='n'>Random</span><span class='p'>.</span><span class='n'>Range</span><span class='p'>(</span><span class='n'>bottomMost</span><span class='p'>,</span> <span class='n'>topMost</span><span class='p'>));</span>
-            <span class='n'>whileCount</span><span class='p'>++;</span>
-            <span class='k'>if</span> <span class='p'>(</span><span class='n'>whileCount</span> <span class='p'>&gt;</span> <span class='m'>10000</span><span class='p'>)</span>
-            <span class='p'>{</span>
-                <span class='kt'>string</span> <span class='n'>polygonstring</span> <span class='p'>=</span> <span class='s'>&quot;&quot;</span><span class='p'>;</span>
-                <span class='k'>foreach</span><span class='p'>(</span><span class='n'>Vector2</span> <span class='n'>vertex</span> <span class='k'>in</span> <span class='n'>vertices</span><span class='p'>)</span>
-                <span class='p'>{</span>
-                    <span class='n'>polygonstring</span> <span class='p'>+=</span> <span class='n'>vertex</span> <span class='p'>+</span> <span class='s'>&quot;, &quot;</span><span class='p'>;</span> 
-                <span class='p'>}</span>
-                <span class='n'>Debug</span><span class='p'>.</span><span class='n'>LogError</span><span class='p'>(</span><span class='s'>&quot;Stuck in while loop. Vertices: &quot;</span> <span class='p'>+</span> <span class='n'>polygonstring</span><span class='p'>);</span>
-                <span class='k'>break</span><span class='p'>;</span>
-            <span class='p'>}</span>
-        <span class='p'>}</span>
-        <span class='k'>while</span> <span class='p'>(!</span><span class='n'>IsPointInPolygon</span><span class='p'>(</span><span class='n'>point</span><span class='p'>));</span>
+        int whileCount = 0;
+        do
+        {
+            point = new Vector2(Random.Range(leftMost, rightMost), Random.Range(bottomMost, topMost));
+            whileCount++;
+            if (whileCount &gt; 10000)
+            {
+                string polygonstring = &quot;&quot;;
+                foreach(Vector2 vertex in vertices)
+                {
+                    polygonstring += vertex + &quot;, &quot;; 
+                }
+                Debug.LogError(&quot;Stuck in while loop. Vertices: &quot; + polygonstring);
+                break;
+            }
+        }
+        while (!IsPointInPolygon(point));
 
-        <span class='k'>return</span> <span class='n'>point</span><span class='p'>;</span>
-    <span class='p'>}</span>
+        return point;
+    }
 
-    <span class='k'>public</span> <span class='n'>Vector2</span> <span class='nf'>GetPointInHole</span><span class='p'>(</span><span class='n'>PSLG</span> <span class='n'>hole</span><span class='p'>)</span>
-    <span class='p'>{</span>
-        <span class='c1'>// 10 Get point in hole</span>
-        <span class='c1'>// 20 Is the point in a polygon that the hole is not in</span>
-        <span class='c1'>// 30 if so goto 10 else return</span>
-        <span class='n'>List</span><span class='p'>&lt;</span><span class='n'>PSLG</span><span class='p'>&gt;</span> <span class='n'>polygons</span> <span class='p'>=</span> <span class='k'>new</span> <span class='n'>List</span><span class='p'>&lt;</span><span class='n'>PSLG</span><span class='p'>&gt;();</span>
-        <span class='k'>for</span> <span class='p'>(</span><span class='kt'>int</span> <span class='n'>i</span> <span class='p'>=</span> <span class='m'>0</span><span class='p'>;</span> <span class='n'>i</span> <span class='p'>&lt;</span> <span class='n'>boundaryMarkersForPolygons</span><span class='p'>.</span><span class='n'>Count</span><span class='p'>;</span> <span class='n'>i</span><span class='p'>++)</span>
-        <span class='p'>{</span>
-            <span class='kt'>int</span> <span class='n'>startIndex</span> <span class='p'>=</span> <span class='n'>boundaryMarkersForPolygons</span><span class='p'>[</span><span class='n'>i</span><span class='p'>];</span>
-            <span class='kt'>int</span> <span class='n'>endIndex</span> <span class='p'>=</span> <span class='n'>vertices</span><span class='p'>.</span><span class='n'>Count</span> <span class='p'>-</span> <span class='m'>1</span><span class='p'>;</span>
-            <span class='k'>if</span> <span class='p'>(</span><span class='n'>i</span> <span class='p'>&lt;</span> <span class='n'>boundaryMarkersForPolygons</span><span class='p'>.</span><span class='n'>Count</span> <span class='p'>-</span> <span class='m'>1</span><span class='p'>)</span>
-                <span class='n'>endIndex</span> <span class='p'>=</span> <span class='n'>boundaryMarkersForPolygons</span><span class='p'>[</span><span class='n'>i</span> <span class='p'>+</span> <span class='m'>1</span><span class='p'>]</span> <span class='p'>-</span> <span class='m'>1</span><span class='p'>;</span>
-            <span class='n'>polygons</span><span class='p'>.</span><span class='n'>Add</span><span class='p'>(</span><span class='k'>new</span> <span class='n'>PSLG</span><span class='p'>(</span><span class='n'>vertices</span><span class='p'>.</span><span class='n'>GetRange</span><span class='p'>(</span><span class='n'>startIndex</span><span class='p'>,</span> <span class='n'>endIndex</span> <span class='p'>-</span> <span class='n'>startIndex</span> <span class='p'>+</span> <span class='m'>1</span><span class='p'>)));</span>
-        <span class='p'>}</span>
+    public Vector2 GetPointInHole(PSLG hole)
+    {
+        // 10 Get point in hole
+        // 20 Is the point in a polygon that the hole is not in
+        // 30 if so goto 10 else return
+        List&lt;PSLG&gt; polygons = new List&lt;PSLG&gt;();
+        for (int i = 0; i &lt; boundaryMarkersForPolygons.Count; i++)
+        {
+            int startIndex = boundaryMarkersForPolygons[i];
+            int endIndex = vertices.Count - 1;
+            if (i &lt; boundaryMarkersForPolygons.Count - 1)
+                endIndex = boundaryMarkersForPolygons[i + 1] - 1;
+            polygons.Add(new PSLG(vertices.GetRange(startIndex, endIndex - startIndex + 1)));
+        }
         
-        <span class='kt'>int</span> <span class='n'>whileCount</span> <span class='p'>=</span> <span class='m'>0</span><span class='p'>;</span>
+        int whileCount = 0;
 
-        <span class='n'>Vector2</span> <span class='n'>point</span><span class='p'>;</span>
-        <span class='kt'>bool</span> <span class='n'>isPointGood</span><span class='p'>;</span>
-        <span class='k'>do</span> 
-        <span class='p'>{</span>
+        Vector2 point;
+        bool isPointGood;
+        do 
+        {
             
-            <span class='n'>isPointGood</span> <span class='p'>=</span> <span class='k'>true</span><span class='p'>;</span>
-            <span class='n'>point</span> <span class='p'>=</span> <span class='n'>hole</span><span class='p'>.</span><span class='n'>GetPointInPolygon</span><span class='p'>();</span>
-            <span class='k'>foreach</span> <span class='p'>(</span><span class='n'>PSLG</span> <span class='n'>polygon</span> <span class='k'>in</span> <span class='n'>polygons</span><span class='p'>)</span>
-            <span class='p'>{</span>
-                <span class='kt'>string</span> <span class='n'>polygonVertices</span> <span class='p'>=</span> <span class='s'>&quot;&quot;</span><span class='p'>;</span>
-                <span class='k'>foreach</span> <span class='p'>(</span><span class='n'>Vector2</span> <span class='n'>vertex</span> <span class='k'>in</span> <span class='n'>polygon</span><span class='p'>.</span><span class='n'>vertices</span><span class='p'>)</span>
-                    <span class='n'>polygonVertices</span> <span class='p'>+=</span> <span class='n'>vertex</span> <span class='p'>+</span> <span class='s'>&quot;,&quot;</span><span class='p'>;</span>
+            isPointGood = true;
+            point = hole.GetPointInPolygon();
+            foreach (PSLG polygon in polygons)
+            {
+                string polygonVertices = &quot;&quot;;
+                foreach (Vector2 vertex in polygon.vertices)
+                    polygonVertices += vertex + &quot;,&quot;;
 
-                <span class='k'>if</span> <span class='p'>(</span><span class='n'>polygon</span><span class='p'>.</span><span class='n'>IsPointInPolygon</span><span class='p'>(</span><span class='n'>hole</span><span class='p'>.</span><span class='n'>vertices</span><span class='p'>[</span><span class='m'>0</span><span class='p'>]))</span>
-                <span class='p'>{</span>
-                    <span class='c1'>// This polygon surrounds the hole, which is OK</span>
-                <span class='p'>}</span>
-                <span class='k'>else</span> <span class='nf'>if</span> <span class='p'>(</span><span class='n'>hole</span><span class='p'>.</span><span class='n'>IsPointInPolygon</span><span class='p'>(</span><span class='n'>polygon</span><span class='p'>.</span><span class='n'>vertices</span><span class='p'>[</span><span class='m'>0</span><span class='p'>]))</span>
-                <span class='p'>{</span>
-                    <span class='c1'>// This polygon is within the hole</span>
+                if (polygon.IsPointInPolygon(hole.vertices[0]))
+                {
+                    // This polygon surrounds the hole, which is OK
+                }
+                else if (hole.IsPointInPolygon(polygon.vertices[0]))
+                {
+                    // This polygon is within the hole
 
-                    <span class='k'>if</span> <span class='p'>(</span><span class='n'>polygon</span><span class='p'>.</span><span class='n'>IsPointInPolygon</span><span class='p'>(</span><span class='n'>point</span><span class='p'>))</span>
-                    <span class='p'>{</span>
-                        <span class='c1'>// The point is within a polygon that is inside the hole, which is NOT OK</span>
-                        <span class='n'>isPointGood</span> <span class='p'>=</span> <span class='k'>false</span><span class='p'>;</span>
-                    <span class='p'>}</span>
-                    <span class='k'>else</span>
-                    <span class='p'>{</span>
-                        <span class='c1'>// But the point was not within this polygon</span>
-                    <span class='p'>}</span>
-                <span class='p'>}</span>
-                <span class='k'>else</span>
-                <span class='p'>{</span>
-                    <span class='c1'>// This polygon is far away from the hole</span>
-                <span class='p'>}</span>
+                    if (polygon.IsPointInPolygon(point))
+                    {
+                        // The point is within a polygon that is inside the hole, which is NOT OK
+                        isPointGood = false;
+                    }
+                    else
+                    {
+                        // But the point was not within this polygon
+                    }
+                }
+                else
+                {
+                    // This polygon is far away from the hole
+                }
 
-            <span class='p'>}</span>
-            <span class='n'>whileCount</span><span class='p'>++;</span>
-            <span class='k'>if</span> <span class='p'>(</span><span class='n'>whileCount</span> <span class='p'>&gt;</span> <span class='m'>10000</span><span class='p'>)</span>
-            <span class='p'>{</span>
-                <span class='kt'>string</span> <span class='n'>holestring</span> <span class='p'>=</span> <span class='s'>&quot;&quot;</span><span class='p'>;</span>
-                <span class='k'>foreach</span><span class='p'>(</span><span class='n'>Vector2</span> <span class='n'>vertex</span> <span class='k'>in</span> <span class='n'>hole</span><span class='p'>.</span><span class='n'>vertices</span><span class='p'>)</span>
-                <span class='p'>{</span>
-                    <span class='n'>holestring</span> <span class='p'>+=</span> <span class='n'>vertex</span> <span class='p'>+</span> <span class='s'>&quot;, &quot;</span><span class='p'>;</span>    
-                <span class='p'>}</span>
+            }
+            whileCount++;
+            if (whileCount &gt; 10000)
+            {
+                string holestring = &quot;&quot;;
+                foreach(Vector2 vertex in hole.vertices)
+                {
+                    holestring += vertex + &quot;, &quot;;    
+                }
                 
-                <span class='n'>Debug</span><span class='p'>.</span><span class='n'>LogError</span><span class='p'>(</span><span class='s'>&quot;Stuck in while loop. Hole vertices: &quot;</span> <span class='p'>+</span> <span class='n'>holestring</span><span class='p'>);</span>
-                <span class='k'>break</span><span class='p'>;</span>
-            <span class='p'>}</span>
-        <span class='p'>}</span>
-        <span class='k'>while</span> <span class='p'>(!</span><span class='n'>isPointGood</span><span class='p'>);</span>
+                Debug.LogError(&quot;Stuck in while loop. Hole vertices: &quot; + holestring);
+                break;
+            }
+        }
+        while (!isPointGood);
 
-        <span class='k'>return</span> <span class='n'>point</span><span class='p'>;</span>
-    <span class='p'>}</span>
-<span class='p'>}</span>
-</code></pre></div><h2>Polygon2D.cs</h2><div class='highlight'><pre><code class='c#'><span class='k'>using</span> <span class='nn'>UnityEngine</span><span class='p'>;</span>
-<span class='k'>using</span> <span class='nn'>System.Collections</span><span class='p'>;</span>
+        return point;
+    }
+}</code></pre>
+  </div><h2>Polygon2D.cs</h2><div>
+    <pre><code class='c#'>using UnityEngine;
+using System.Collections;
 
-<span class='k'>public</span> <span class='k'>class</span> <span class='nc'>Polygon2D</span> <span class='p'>{</span>
+public class Polygon2D {
 
-    <span class='k'>public</span> <span class='kt'>int</span><span class='p'>[]</span> <span class='n'>triangles</span><span class='p'>;</span>
-    <span class='k'>public</span> <span class='n'>Vector2</span><span class='p'>[]</span> <span class='n'>vertices</span><span class='p'>;</span>
+    public int[] triangles;
+    public Vector2[] vertices;
 
-    <span class='k'>public</span> <span class='nf'>Polygon2D</span><span class='p'>(</span><span class='kt'>int</span><span class='p'>[]</span> <span class='n'>triangle</span><span class='p'>,</span> <span class='n'>Vector2</span><span class='p'>[]</span> <span class='n'>vertices</span><span class='p'>)</span>
-    <span class='p'>{</span>
-        <span class='k'>this</span><span class='p'>.</span><span class='n'>triangles</span> <span class='p'>=</span> <span class='n'>triangle</span><span class='p'>;</span>
-        <span class='k'>this</span><span class='p'>.</span><span class='n'>vertices</span> <span class='p'>=</span> <span class='n'>vertices</span><span class='p'>;</span>
-    <span class='p'>}</span>
-<span class='p'>}</span>
-</code></pre></div><h2>Feedback</h2>
+    public Polygon2D(int[] triangle, Vector2[] vertices)
+    {
+        this.triangles = triangle;
+        this.vertices = vertices;
+    }
+}</code></pre>
+  </div><h2>Feedback</h2>
 <p>If you found this useful and/or if you have feedback, please let me know <a href='https://twitter.com/mathmos_'>@mathmos_</a>.</p>
 	</div>
 	<!--<div class="blog_postedby">Posted by: mathmos_</div>

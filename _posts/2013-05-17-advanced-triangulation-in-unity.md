@@ -617,4 +617,4 @@ public class Polygon2D {
 {% endhighlight %}
 
 <h2>Feedback</h2>
-If you found this useful and/or if you have feedback, please let me know <a href="https://twitter.com/mathmos_">@mathmos_</a>.
+If you found this useful and/or if you have feedback, please let me know <a href="https://twitter.com/mathmos_">@mathmos\_</a>.
